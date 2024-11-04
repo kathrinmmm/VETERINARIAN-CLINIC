@@ -1,15 +1,15 @@
 package model;
 
 public class Pet extends User{
-    private String name;
+    private String petName;
     private String birthDate;
     private String gender;
     private String breed;
     private String species;
 
-    public Pet(int id, String firstName,String lastName, String email, String password, String username,String name, String birthDate, String gender, String breed, String species) {
+    public Pet(int id, String firstName,String lastName, String email,String username, String password,String petName, String birthDate, String gender,String species, String breed) {
         super( id, firstName,lastName, email, password, username);
-        this.name = name;
+        this.petName = petName;
         this.birthDate = birthDate;
         this.gender = gender;
         this.breed = breed;
@@ -19,7 +19,7 @@ public class Pet extends User{
     @Override
     public void displayUserInfo() {
         System.out.println("Owner Name: " + getFirstName() + " " + getLastName());
-        System.out.println("Pet Name:" + getName());
+        System.out.println("Pet Name:" + getPetName());
         System.out.println("Gender: " + getGender());
         System.out.println("Species: " + getSpecies());
         System.out.println("Breed: " + getBreed());
@@ -28,11 +28,11 @@ public class Pet extends User{
 
     }
 
-    public String getName() {
-        return name;
+    public String getPetName() {
+        return petName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setPetName(String petName) {
+        this.petName = petName;
     }
     public String getBirthDate() {
         return birthDate;

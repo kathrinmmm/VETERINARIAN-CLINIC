@@ -1,7 +1,9 @@
 package model;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class User {
-    private int id;
+    private int user_id;
     private String firstName;
     private String email;
     private String lastName;
@@ -10,8 +12,8 @@ public abstract class User {
 
 
 
-    public User(int id, String firstName,String lastName, String email, String password, String username) {
-        this.id = id;
+    public User(int id, String firstName,String lastName, String email, String username, String password) {
+        this.user_id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -20,12 +22,12 @@ public abstract class User {
 
     }
 
-    public int getId() {
-        return id;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public String getFirstName() {
