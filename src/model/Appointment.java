@@ -1,5 +1,5 @@
 package model;
-
+import java.util.List;
 public class Appointment {
     private int id;
     private int pet_id;
@@ -8,15 +8,27 @@ public class Appointment {
     private String time;
     private String typeOfAppointment;
     private String results;
+    private List<Vaccine> vaccines;
+    private List<Test> tests;
 
-    public Appointment(int id, int pet_id, int vet_id, String date, String time, String results, String typeOfAppointment) {
+    public Appointment(int id, int petId, int vetId, String date, String time, String results,
+                       String typeOfAppointment, List<Vaccine> vaccines, List<Test> tests) {
         this.id = id;
-        this.pet_id = pet_id;
-        this.vet_id = vet_id;
+        this.pet_id = petId;
+        this.vet_id = vetId;
         this.date = date;
         this.time = time;
         this.results = results;
         this.typeOfAppointment = typeOfAppointment;
+        this.vaccines = vaccines;
+        this.tests = tests;
+    }
+    public List<Vaccine> getVaccines() {
+        return vaccines;
+    }
+
+    public List<Test> getTests() {
+        return tests;
     }
 
     public int getId() {
