@@ -1,25 +1,15 @@
-package Repository;
+package src.Repository;
 
 import java.util.List;
 
-public abstract class IRepository<T> {
-    void create(T entity) {
+public interface IRepository<T> {
+    void create(T entity);
 
-    }
+    T read(int id);
 
-    T read(int id) {
-        return null;
-    }
+    void update(T entity);
 
-    void update(T entity) {
+    void delete(int id);
 
-    }
-
-    void delete(int id) {
-
-    }
-
-    List<T> findAll() {
-        return null;
-    }
+    List<T> findAll();
 }
