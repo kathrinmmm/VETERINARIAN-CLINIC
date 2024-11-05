@@ -31,7 +31,7 @@ public class AppointmentService {
         System.out.print("ID Programare: ");
         int id = scanner.nextInt();
 
-        System.out.print("ID Animal (Pet ID): ");
+        System.out.print("Pet ID: ");
         int petId = scanner.nextInt();
 
         System.out.println("Selectați un veterinar:");
@@ -56,14 +56,14 @@ public class AppointmentService {
         LocalTime time = selectTime();
 
         if (!selectedVeterinarian.isAvailable(date, time)) {
-            System.out.println("Veterinarul nu este disponibil la data și ora selectată.");
+            System.out.println("Veterinarul nu este disponibil la data și ora selectata");
             return;
         }
 
 
         scanner.nextLine();
 
-        System.out.print("Tipul programării (ex: Vaccinare, Consultație): ");
+        System.out.print("Tipul programarii: ");
         String typeOfAppointment = scanner.nextLine();
 
         List<Vaccine> vaccines = new ArrayList<>();
@@ -80,7 +80,7 @@ public class AppointmentService {
     }
 
     private LocalDate selectDate() {
-        System.out.println("Introduceti data programării (yyyy-MM-dd):");
+        System.out.println("Introduceti data programării (dd-MM-yyyy):");
         LocalDate date;
         while (true) {
             try {

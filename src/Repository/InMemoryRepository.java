@@ -1,8 +1,8 @@
-package src.Repository;
+package Repository;
 
 import java.util.*;
 
-public class InMemoryRepository<T> implements IRepository<T> {
+public class InMemoryRepository<T> implements src.Repository.IRepository<T> {
     private Map<Integer, T> data = new HashMap<>();
     private int currentId = 1;
 
