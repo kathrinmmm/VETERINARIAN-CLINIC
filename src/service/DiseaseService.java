@@ -1,4 +1,4 @@
-package service;
+package src.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class DiseaseService {
         diseases.add(new Disease(1, "Rabies", "Viral"));
         diseases.add(new Disease(2, "Parvovirus", "Viral"));
         diseases.add(new Disease(3, "Feline Leukemia", "Viral"));
-        diseases.add(new Disease(4, "Canine Distemper", "Viral")); 
+        diseases.add(new Disease(4, "Canine Distemper", "Viral"));
 
         testFrequencies.put(1, 365);
         vaccineFrequencies.put(1, 365);

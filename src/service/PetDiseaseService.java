@@ -1,4 +1,4 @@
-package service;
+package src.service;
 
 public class PetDiseaseService {
 }
