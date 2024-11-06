@@ -1,5 +1,5 @@
 package service;
-import model.Disease;
+import model.User;
 import model.Pet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,27 +21,17 @@ public class PetService {
     }
 
     public PetService() {
-
+        speciesToBreeds = new HashMap<>();
+        speciesToBreeds.put("Caine", List.of("Labrador", "Beagle", "Bulldog", "Golden Retriever", "Cocker Spaniol"));
+        speciesToBreeds.put("Pisica", List.of("Siamese", "Persană", "Maine Coon", "Bengaleză", "Sfinx"));
+        speciesToBreeds.put("Papagal", List.of("Papagal ondulat", "Cacadu", "Papagal gri african", "Perus"));
+        speciesToBreeds.put("Iepure", List.of("Iepurele Urias Belgian", "Chinchilla","Albastru Vienez"));
     };
 
-
-
-    public void registerPet() {
+    public void registerPet(User user) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Introdu datele animalului de companie:");
-        System.out.print("ID: ");
-        int id = scanner.nextInt();
-
-        scanner.nextLine();
-        System.out.print("Nume stăpân: ");
-        String ownerFirstName = scanner.nextLine();
-
-        System.out.print("Prenume stăpân: ");
-        String ownerLastName = scanner.nextLine();
-
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
 
         System.out.print("Nume animal: ");
         String petName = scanner.nextLine();
@@ -50,7 +40,6 @@ public class PetService {
         String birthDate = scanner.nextLine();
 
         String species = selectSpecies(scanner);
-
         String breed = selectBreed(scanner, species);
 
         String gender;
@@ -64,10 +53,13 @@ public class PetService {
             }
         }
 
-        Pet pet = new Pet(id, ownerFirstName, ownerLastName, email, "username", "password", petName, birthDate, gender, species, breed);
+        Pet pet = new Pet(user.getUser_id(), user.getFirstName(), user.getLastName(), user.getEmail(),
+                "username", "password", petName, birthDate, gender, species, breed);
+
         pets.add(pet);
         System.out.println("Animalul de companie a fost înregistrat cu succes.");
     }
+
 
     private String selectSpecies(Scanner scanner) {
         System.out.println("Selectați specia animalului:");

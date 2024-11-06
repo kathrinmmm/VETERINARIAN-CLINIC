@@ -1,10 +1,7 @@
 package UI;
 import Controller.appController;
 import Repository.IRepository;
-import model.Disease;
-import model.User;
-import model.Vaccine;
-import model.Veterinarian;
+import model.*;
 import service.*;
 
 import java.util.Scanner;
@@ -21,8 +18,8 @@ public class UI {
     public void showMainMenu() {
         while (true) {
             System.out.println("==== Main Menu ====");
-            System.out.println("1. Sign In (Veterinarian or Pet)");
-            System.out.println("2. Log In (Veterinarian or Pet)");
+            System.out.println("1. Sign In");
+            System.out.println("2. Log In");
             System.out.println("3. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
@@ -30,10 +27,17 @@ public class UI {
 
             switch (choice) {
                 case 1:
-                    signInMenu();
+                    controller.registerUser();
                     break;
                 case 2:
-                    logInMenu();
+                    User user = controller.loginUser();
+                    if (user != null) {
+                        if (user instanceof Pet) {
+                            petMenu(user);
+                        } else if (user instanceof Veterinarian) {
+                            veterinarianMenu(user);
+                        }
+                    }
                     break;
                 case 3:
                     System.out.println("Goodbye!");
@@ -43,86 +47,59 @@ public class UI {
             }
         }
     }
-
-    private void signInMenu() {
-        System.out.println("Select User Type:");
-        System.out.println("1. Veterinarian");
-        System.out.println("2. Pet Owner");
-        int userType = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter Username: ");
-        String username = scanner.nextLine();
-        System.out.print("Enter Password: ");
-        String password = scanner.nextLine();
-
-        if (userType == 1) {
-            controller.registerUser();
-        } else if (userType == 2) {
-            controller.registerUser();
-        } else {
-            System.out.println("Invalid user type.");
-        }
-    }
-
-    private void logInMenu() {
-        System.out.println("Select User Type:");
-        System.out.println("1. Veterinarian");
-        System.out.println("2. Pet Owner");
-        int userType = scanner.nextInt();
-        scanner.nextLine();  // consume newline
-
-        System.out.print("Enter Username: ");
-        String username = scanner.nextLine();
-        System.out.print("Enter Password: ");
-        String password = scanner.nextLine();
-
-        if (userType == 1) {
-            User veterinarian = controller.loginUser();
-            if (veterinarian != null) {
-                veterinarianMenu();
-            } else {
-                System.out.println("Invalid login. Try again.");
-            }
-        } else if (userType == 2) {
-            User petOwner = controller.loginUser();
-            if (petOwner != null) {
-                petOwnerMenu();
-            } else {
-                System.out.println("Invalid login. Try again.");
-            }
-        } else {
-            System.out.println("Invalid user type.");
-        }
-    }
-
-    // Veterinarian menu after successful login
-    private void veterinarianMenu() {
+    private void petMenu(User user) {
         while (true) {
-            System.out.println("==== Veterinarian Menu ====");
+            System.out.println("==== Pet Menu ====");
             System.out.println("1. Add Pet");
-            System.out.println("2. Add Disease");
-            System.out.println("3. Add Vaccine");
-            System.out.println("4. View All Pets");
-            System.out.println("5. Logout");
+            System.out.println("2. Find Pet");
+            System.out.println("3. Add Appointment ");
+            System.out.println("4. Logout");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();  // consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
                     addPetMenu();
                     break;
                 case 2:
-                    addDiseaseMenu();
-                    break;
+                    findPetByID();
                 case 3:
-                    addVaccineMenu();
+                    addAppointmentMenu();
                     break;
                 case 4:
+                    System.out.println("Logging out...");
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+
+
+
+            }
+        }
+    }
+    private void veterinarianMenu(User user) {
+        while (true) {
+            System.out.println("==== Veterinarian Menu ====");
+            System.out.println("1. Add New Disease");
+            System.out.println("2. Add New Vaccine");
+            System.out.println("3. View All Pets");
+            System.out.println("4. Logout");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addDiseaseMenu();
+                    break;
+                case 2:
+                    addVaccineMenu();
+                    break;
+                case 3:
                     controller.DisplayAllPets();
                     break;
-                case 5:
+                case 4:
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -142,7 +119,7 @@ public class UI {
     private void addDiseaseMenu() {
         System.out.print("Enter Disease ID: ");
         int diseaseId = scanner.nextInt();
-        scanner.nextLine();  // consume newline
+        scanner.nextLine();
         System.out.print("Enter Disease Name: ");
         String diseaseName = scanner.nextLine();
         System.out.print("Enter Disease Type: ");
@@ -153,49 +130,49 @@ public class UI {
     private void addVaccineMenu() {
         System.out.print("Enter Vaccine ID: ");
         int vaccineId = scanner.nextInt();
-        scanner.nextLine();  // consume newline
+        scanner.nextLine();
         System.out.print("Enter Vaccine Name: ");
         String vaccineName = scanner.nextLine();
         controller.addVaccine();
     }
 
-    private void petOwnerMenu() {
-        while (true) {
-            System.out.println("==== Pet Owner Menu ====");
-            System.out.println("1. Add Appointment");
-            System.out.println("2. View Health Record");
-            System.out.println("3. View Available Tests");
-            System.out.println("4. View Available Vaccines");
-            System.out.println("5. View Notifications");
-            System.out.println("6. Logout");
-            System.out.print("Choose an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();  // consume newline
-
-            switch (choice) {
-                case 1:
-                    addAppointmentMenu();
-                    break;
-                case 2:
-                    viewHealthRecordMenu();
-                    break;
-                case 3:
-                    viewAvailableTests();
-                    break;
-                case 4:
-                    viewAvailableVaccines();
-                    break;
-                case 5:
-                    viewNotifications();
-                    break;
-                case 6:
-                    System.out.println("Logging out...");
-                    return;
-                default:
-                    System.out.println("Invalid choice, please try again.");
-            }
-        }
-    }
+//    private void petOwnerMenu() {
+//        while (true) {
+//            System.out.println("==== Pet Owner Menu ====");
+//            System.out.println("1. Add Appointment");
+//            System.out.println("2. View Health Record");
+//            System.out.println("3. View Available Tests");
+//            System.out.println("4. View Available Vaccines");
+//            System.out.println("5. View Notifications");
+//            System.out.println("6. Logout");
+//            System.out.print("Choose an option: ");
+//            int choice = scanner.nextInt();
+//            scanner.nextLine();
+//
+//            switch (choice) {
+//                case 1:
+//                    addAppointmentMenu();
+//                    break;
+//                case 2:
+//                    viewHealthRecordMenu();
+//                    break;
+//                case 3:
+//                    viewAvailableTests();
+//                    break;
+//                case 4:
+//                    viewAvailableVaccines();
+//                    break;
+//                case 5:
+//                    viewNotifications();
+//                    break;
+//                case 6:
+//                    System.out.println("Logging out...");
+//                    return;
+//                default:
+//                    System.out.println("Invalid choice, please try again.");
+//            }
+//        }
+//    }
 
     private void addAppointmentMenu() {
         System.out.print("Enter Pet ID: ");
@@ -219,6 +196,12 @@ public class UI {
 
     private void viewNotifications() {
         controller.listNotifications();
+    }
+
+    private void findPetByID() {
+        System.out.print("Enter Pet ID: ");
+        int petId=scanner.nextInt();
+        controller.findPetById(petId);
     }
 
     public static void main(String[] args) {

@@ -19,21 +19,22 @@ public class UserService {
     }
 
     public UserService() {
-
+        users = new HashMap<>();
+        scanner = new Scanner(System.in);  // Inițializare scanner
     }
 
     public void registerUser() {
-        System.out.println("Introdu datele pentru înregistrare:");
+        System.out.println("--Registration Data--");
 
         System.out.print("ID: ");
         int id = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Nume: ");
-        String firstName = scanner.nextLine();
-
-        System.out.print("Prenume: ");
+        System.out.print("Last name: ");
         String lastName = scanner.nextLine();
+
+        System.out.print("First name: ");
+        String firstName = scanner.nextLine();
 
         System.out.print("Email: ");
         String email = scanner.nextLine();
@@ -41,61 +42,72 @@ public class UserService {
         System.out.print("Username: ");
         String username = scanner.nextLine();
 
-        System.out.print("Parola: ");
+        System.out.print("Password: ");
         String password = scanner.nextLine();
 
-        System.out.print("Rol (Pet/Veterinarian): ");
-        String role = scanner.nextLine();
+        int role = 0;
+        while (role != 1 && role != 2) {
+            System.out.print("Role (1 for Pet, 2 for Veterinarian): ");
+            if (scanner.hasNextInt()) {
+                role = scanner.nextInt();
+                scanner.nextLine();
+                if (role != 1 && role != 2) {
+                    System.out.println("Please choose between 1 (for Pet) and 2 (for Veterinarian)");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter 1 or 2.");
+                scanner.nextLine();
+            }
+        }
 
         User user;
-        if (role.equalsIgnoreCase("Pet")) {
+        if (role == 1) {
             PetService petService = new PetService();
-            petService.registerPet();
             user = new Pet(id, firstName, lastName, email, username, password, "PetName", "BirthDate", "M", "Species", "Breed");
+            petService.registerPet(user); // Transmitem user-ul ca parametru
         } else {
-            System.out.print("Specializare: ");
+            System.out.print("Specialization: ");
             String specialization = scanner.nextLine();
             user = new Veterinarian(id, firstName, lastName, email, username, password, specialization);
         }
 
         users.put(username, user);
-        System.out.println("Utilizatorul a fost înregistrat cu succes.");
+        System.out.println("User has been successfully registered.");
     }
 
     public User loginUser() {
-        System.out.println("Introdu datele pentru logare:");
+        System.out.println("--Log In Data--");
 
         System.out.print("Username: ");
         String username = scanner.nextLine();
 
-        System.out.print("Parola: ");
+        System.out.print("Password: ");
         String password = scanner.nextLine();
 
         User user = users.get(username);
         if (user != null && user.getPassword().equals(password)) {
-            System.out.println("Logare reușită!");
+            System.out.println("Log In successful");
             return user;
         } else {
-            System.out.println("Username sau parolă incorectă.");
+            System.out.println("Wrong username or password.");
             return null;
         }
     }
 
     public void resetPassword() {
-        System.out.println("Introdu datele pentru resetarea parolei:");
+        System.out.println("-- Resetting Password --");
 
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
+        User user = null;
+        while (user == null) {
+            System.out.print("Username: ");
+            String username = scanner.nextLine();
 
-        User user = users.get(username);
-        if (user != null) {
-            System.out.print("Introdu noua parolă: ");
-            String newPassword = scanner.nextLine();
-
-            user.setPassword(newPassword);
-            System.out.println("Parola a fost resetată cu succes.");
-        } else {
-            System.out.println("Username inexistent. Vă rugăm să verificați și să încercați din nou.");
+            user = users.get(username);
+            if (user == null) {
+                System.out.println("Wrong username. Please try again.");
+            }
         }
+
+        System.out.print("New password: ");
     }
 }

@@ -72,7 +72,18 @@ public class appController {
     }
 
     public void registerPet() {
-        petService.registerPet();
+        userService.registerUser();
+
+        // După înregistrare, putem obține utilizatorul înregistrat (presupunând că login-ul este deja realizat sau că avem un obiect valid)
+        User user = userService.loginUser();  // Sau un alt mod de obținere a utilizatorului valid
+
+        // Verificăm dacă utilizatorul este valid
+        if (user != null) {
+            // Transmitem obiectul user către metoda registerPet din PetService
+            petService.registerPet(user);
+        } else {
+            System.out.println("Nu s-a putut înregistra animalul de companie, deoarece utilizatorul nu a fost valid.");
+        }
     }
 
     public void addDiseaseToPet(int petId, int diseaseId) {

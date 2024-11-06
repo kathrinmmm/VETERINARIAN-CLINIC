@@ -32,6 +32,6 @@ public class Main {
                 testService, petDiseaseService, userService, notificationService);
 
         UI ui = new UI(controller);
-        ui.showMainMenu(); 
+        ui.showMainMenu();
     }
 }
