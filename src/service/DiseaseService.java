@@ -67,4 +67,6 @@ public class DiseaseService {
     public int getRecommendedVaccineFrequency(int diseaseId) {
         return vaccineFrequencies.getOrDefault(diseaseId, -1); // Returns -1 if disease not found
     }
+
+
 }

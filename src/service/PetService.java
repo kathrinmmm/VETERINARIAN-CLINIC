@@ -1,4 +1,5 @@
 package service;
+import model.Disease;
 import model.Pet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,5 +112,8 @@ public class PetService {
         return null;
     }
 
+public List<Pet> DisplayAllPets() {
+        return pets;
+}
 
 }
