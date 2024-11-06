@@ -1,5 +1,6 @@
 package service;
 
+import Repository.IRepository;
 import model.User;
 import model.Pet;
 import model.Veterinarian;
@@ -12,18 +13,21 @@ public class UserService {
     private Map<String, User> users;
     private Scanner scanner;
 
-    public UserService() {
+    public UserService(IRepository<User> userRepository) {
         users = new HashMap<>();
         scanner = new Scanner(System.in);
     }
 
+    public UserService() {
+
+    }
 
     public void registerUser() {
         System.out.println("Introdu datele pentru înregistrare:");
 
         System.out.print("ID: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Consumăm newline
+        scanner.nextLine();
 
         System.out.print("Nume: ");
         String firstName = scanner.nextLine();

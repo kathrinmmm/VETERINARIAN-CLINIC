@@ -1,5 +1,6 @@
 package service;
 
+import Repository.IRepository;
 import model.Appointment;
 import model.HealthRecord;
 import model.Pet;
@@ -10,9 +11,14 @@ import java.util.List;
 public class HealthRecordService {
     private List<HealthRecord> healthRecords;
 
-    public HealthRecordService() {
+    public HealthRecordService(IRepository<HealthRecord> healthRecordRepository) {
         this.healthRecords = new ArrayList<>();
     }
+
+    public HealthRecordService() {
+
+    }
+
     public void addHealthRecord(Pet pet) {
         HealthRecord record = new HealthRecord(pet.getUser_id(), new ArrayList<>());
         healthRecords.add(record);

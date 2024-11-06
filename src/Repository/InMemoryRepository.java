@@ -2,7 +2,7 @@ package Repository;
 
 import java.util.*;
 
-public class InMemoryRepository<T> implements src.Repository.IRepository<T> {
+public class InMemoryRepository<T> implements Repository.IRepository<T> {
     private Map<Integer, T> data = new HashMap<>();
     private int currentId = 1;
 
@@ -38,4 +38,5 @@ public class InMemoryRepository<T> implements src.Repository.IRepository<T> {
     public List<T> findAll() {
         return new ArrayList<>(data.values());
     }
+
 }

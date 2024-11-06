@@ -1,9 +1,17 @@
 package service;
 
+import Repository.IRepository;
 import model.Appointment;
 import model.Test;
 
 public class TestService {
+
+    public TestService(IRepository<Test> testRepository) {
+    }
+
+    public TestService() {
+
+    }
 
     public void addTestToAppointment(Appointment appointment, Test test) {
         appointment.getTests().add(test);

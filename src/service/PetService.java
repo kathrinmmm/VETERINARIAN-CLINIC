@@ -6,18 +6,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
+import Repository.IRepository;
 public class PetService {
+    private IRepository<Pet> petRepository;
     private List<Pet> pets = new ArrayList<>();
     private Map<String, List<String>> speciesToBreeds;
 
-    public PetService() {
+    public PetService(IRepository<Pet> petRepository) {
         speciesToBreeds = new HashMap<>();
         speciesToBreeds.put("Caine", List.of("Labrador", "Beagle", "Bulldog", "Golden Retriever", "Cocker Spaniol"));
         speciesToBreeds.put("Pisica", List.of("Siamese", "Persană", "Maine Coon", "Bengaleză", "Sfinx"));
         speciesToBreeds.put("Papagal", List.of("Papagal ondulat", "Cacadu", "Papagal gri african", "Perus"));
         speciesToBreeds.put("Iepure", List.of("Iepurele Urias Belgian", "Chinchilla","Albastru Vienez"));
     }
+
+    public PetService() {
+
+    };
+
+
 
     public void registerPet() {
         Scanner scanner = new Scanner(System.in);

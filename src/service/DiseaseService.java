@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import Repository.IRepository;
 import model.Disease;
 
 public class DiseaseService {
@@ -11,7 +13,7 @@ public class DiseaseService {
     private Map<Integer, Integer> testFrequencies = new HashMap<>();
     private Map<Integer, Integer> vaccineFrequencies = new HashMap<>();
 
-    public DiseaseService() {
+    public DiseaseService(IRepository<Disease> diseaseRepository) {
         diseases.add(new Disease(1, "Rabies", "Viral"));
         diseases.add(new Disease(2, "Parvovirus", "Viral"));
         diseases.add(new Disease(3, "Feline Leukemia", "Viral"));
@@ -28,6 +30,10 @@ public class DiseaseService {
 
         testFrequencies.put(4, 365);
         vaccineFrequencies.put(4, 365);
+    }
+
+    public DiseaseService() {
+
     }
 
     public void modifyTestFrequency(int diseaseId, int newFrequency) {

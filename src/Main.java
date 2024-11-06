@@ -1,15 +1,37 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import Controller.appController;
+import Repository.*;
+import service.*;
+import model.*;
+import UI.UI;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        IRepository<Pet> petRepository = new InMemoryRepository<>();
+        IRepository<User> userRepository = new InMemoryRepository<>();
+        IRepository<Disease> diseaseRepository = new InMemoryRepository<>();
+        IRepository<Veterinarian> veterinarianRepository = new InMemoryRepository<>();
+        IRepository<Appointment> appointmentRepository = new InMemoryRepository<>();
+        IRepository<Test> testRepository = new InMemoryRepository<>();
+        IRepository<Vaccine> vaccineRepository = new InMemoryRepository<>();
+        IRepository<HealthRecord> healthRecordRepository = new InMemoryRepository<>();
+        IRepository<Pet_Disease> petDiseaseRepository = new InMemoryRepository<>();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        PetService petService = new PetService(petRepository);
+        UserService userService = new UserService(userRepository);
+        DiseaseService diseaseService = new DiseaseService(diseaseRepository);
+        VeterinarianService veterinarianService = new VeterinarianService(veterinarianRepository);
+        AppointmentService appointmentService = new AppointmentService(appointmentRepository);
+        TestService testService = new TestService(testRepository);
+        VaccineService vaccineService = new VaccineService(vaccineRepository);
+        HealthRecordService healthRecordService = new HealthRecordService(healthRecordRepository);
+        PetDiseaseService petDiseaseService = new PetDiseaseService(petDiseaseRepository);
+        NotificationService notificationService = new NotificationService();
+
+        appController controller = new appController(appointmentService, diseaseService, healthRecordService,
+                vaccineService, petService, veterinarianService,
+                testService, petDiseaseService, userService, notificationService);
+
+        UI ui = new UI(controller);
+        ui.showMainMenu(); 
     }
 }

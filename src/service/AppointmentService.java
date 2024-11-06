@@ -1,5 +1,6 @@
 package service;
 
+import Repository.IRepository;
 import model.Appointment;
 import model.User;
 import model.Vaccine;
@@ -23,6 +24,13 @@ public class AppointmentService {
         this.notificationService = notificationService;
         this.veterinarianService = veterinarianService;
         this.scanner = new Scanner(System.in);
+    }
+
+    public AppointmentService(IRepository<Appointment> appointmentRepository) {
+        this.appointments = new ArrayList<>();
+        this.notificationService = new NotificationService();
+        this.scanner = new Scanner(System.in);
+        this.veterinarianService = veterinarianService;
     }
 
     public void addAppointment() {

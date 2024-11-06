@@ -1,5 +1,6 @@
 package service;
 
+import Repository.IRepository;
 import model.Veterinarian;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.util.List;
 public class VeterinarianService {
     private List<Veterinarian> veterinarians;
 
-    public VeterinarianService() {
+    public VeterinarianService(IRepository<Veterinarian> veterinarianRepository) {
         veterinarians = new ArrayList<>();
     }
 

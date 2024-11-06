@@ -1,7 +1,9 @@
 package service;
 
+import Repository.IRepository;
 import model.Disease;
 import model.Pet;
+import model.Pet_Disease;
 
 import java.util.*;
 
@@ -13,6 +15,9 @@ public class PetDiseaseService {
     public PetDiseaseService(DiseaseService diseaseService, PetService petService) {
         this.diseaseService = diseaseService;
         this.petService = petService;
+    }
+
+    public PetDiseaseService(IRepository<Pet_Disease> petDiseaseRepository) {
     }
 
     public void addDiseaseToPet(int petId, int diseaseId) {

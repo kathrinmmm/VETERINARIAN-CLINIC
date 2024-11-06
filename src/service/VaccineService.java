@@ -1,5 +1,6 @@
 package service;
 
+import Repository.IRepository;
 import model.Appointment;
 import model.Vaccine;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class VaccineService {
     private ArrayList<Vaccine> vaccines;
     private Scanner scanner;
 
-    public VaccineService() {
+    public VaccineService(IRepository<Vaccine> vaccineRepository) {
         vaccines = new ArrayList<>(Arrays.asList(
                 new Vaccine(1, "Canine Parvovirus Vaccine", "Type1", 10, 10),
                 new Vaccine(2, "Rabies Vaccine", "Type2", 15, 15),
@@ -20,6 +21,10 @@ public class VaccineService {
                 new Vaccine(5, "Leptospirosis Vaccine", "Type3", 5, 5)
         ));
         scanner = new Scanner(System.in);
+    }
+
+    public VaccineService() {
+
     }
 
     public void addVaccine() {
