@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,8 @@ public class Pet extends User {
     private List<String> notifications;
     private List<Appointment> appointments;
 
-    public Pet(int id, String firstName, String lastName, String email, String username, String password, String petName, String birthDate, String gender, String species, String breed) {
-        super(id, firstName, lastName, email, username, password, "Pet");
+    public Pet(int id, String petName, String username, String password) {
+        super(id, "", "", "", username, password, "Pet"); // Empty strings for firstName, lastName, and email
         this.petName = petName;
         this.birthDate = birthDate;
         this.gender = gender;
@@ -21,6 +22,7 @@ public class Pet extends User {
         this.notifications = new ArrayList<String>();
         this.appointments = new ArrayList<>();
     }
+
 
     @Override
     public void displayUserInfo() {

@@ -332,5 +332,8 @@ public class Service {
             appointmentRepository.update(appointmentId, existingAppointment);
         }
     }
-
+    public boolean usernameExists(String username) {
+        return petRepository.findAll().stream().anyMatch(pet -> pet.getUsername().equals(username)) ||
+                vetRepository.findAll().stream().anyMatch(vet -> vet.getUsername().equals(username));
+    }
 }

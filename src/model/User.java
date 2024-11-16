@@ -7,8 +7,8 @@ public abstract class User {
     private String firstName;
     private String email;
     private String lastName;
-    private String password;
-    private String username;
+    protected String password;
+    protected String username;
     private String role;
 
 

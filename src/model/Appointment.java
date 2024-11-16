@@ -10,11 +10,10 @@ public class Appointment {
     private List<Vaccine> vaccines;
     private List<Test> tests;
 
-    public Appointment(int id, int petId, int vetId, String date, String time,
-                       int typeOfAppointment, List<Vaccine> vaccines, List<Test> tests) {
+    public Appointment(int id, int petId, String date) {
         this.id = id;
         this.pet_id = petId;
-        this.vet_id = vetId;
+        this.vet_id = vet_id;
         this.date = date;
         this.time = time;
         this.typeOfAppointment = typeOfAppointment;
