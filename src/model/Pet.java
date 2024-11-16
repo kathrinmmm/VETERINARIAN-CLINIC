@@ -1,4 +1,6 @@
 package model;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Pet extends User {
     private String petName;
@@ -6,6 +8,8 @@ public class Pet extends User {
     private String gender;
     private String breed;
     private String species;
+    private List<String> notifications;
+    private List<Appointment> appointments;
 
     public Pet(int id, String firstName, String lastName, String email, String username, String password, String petName, String birthDate, String gender, String species, String breed) {
         super(id, firstName, lastName, email, username, password, "Pet");
@@ -14,6 +18,8 @@ public class Pet extends User {
         this.gender = gender;
         this.breed = breed;
         this.species = species;
+        this.notifications = new ArrayList<String>();
+        this.appointments = new ArrayList<>();
     }
 
     @Override
@@ -56,5 +62,18 @@ public class Pet extends User {
     }
     public void setSpecies(String species) {
         this.species = species;
+    }
+    public void addNotification(String message) {
+        notifications.add(message);
+    }
+
+    public List<String> getNotifications() {
+        return notifications;
+    }
+    public void addAppointment(Appointment appointment) {
+        this.appointments.add(appointment);
+    }
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 }

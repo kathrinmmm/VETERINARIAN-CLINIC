@@ -1,5 +1,5 @@
 package Repository;
-
+import java.util.Optional;
 import java.util.List;
 
 public interface IRepository<T> {
@@ -7,9 +7,11 @@ public interface IRepository<T> {
 
     T read(int id);
 
-    void update(T entity);
+    void update(int id, T entity);
 
     void delete(int id);
 
     List<T> findAll();
+
+    Optional<T> findById(int id);
 }

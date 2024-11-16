@@ -5,6 +5,7 @@ import java.util.List;
 public class HealthRecord {
     private int petId;
     private List<Appointment> appointments;
+    private List<Disease> diseases;
 
     public HealthRecord(int petId, List<Appointment> appointments) {
         this.petId = petId;
@@ -30,4 +31,6 @@ public class HealthRecord {
     public List<Appointment> getAppointments() {
         return appointments;
     }
+
+    public List<Disease> getDiseases(){ return diseases;}
 }

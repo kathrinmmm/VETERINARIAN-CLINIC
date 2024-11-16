@@ -6,19 +6,17 @@ public class Appointment {
     private int vet_id;
     private String date;
     private String time;
-    private String typeOfAppointment;
-    private String results;
+    private int typeOfAppointment;
     private List<Vaccine> vaccines;
     private List<Test> tests;
 
-    public Appointment(int id, int petId, int vetId, String date, String time, String results,
-                       String typeOfAppointment, List<Vaccine> vaccines, List<Test> tests) {
+    public Appointment(int id, int petId, int vetId, String date, String time,
+                       int typeOfAppointment, List<Vaccine> vaccines, List<Test> tests) {
         this.id = id;
         this.pet_id = petId;
         this.vet_id = vetId;
         this.date = date;
         this.time = time;
-        this.results = results;
         this.typeOfAppointment = typeOfAppointment;
         this.vaccines = vaccines;
         this.tests = tests;
@@ -29,6 +27,14 @@ public class Appointment {
 
     public List<Test> getTests() {
         return tests;
+    }
+
+    public void setVaccines(List<Vaccine> vaccines) {
+        this.vaccines = vaccines;
+    }
+
+    public void setTests(List<Test> tests) {
+        this.tests = tests;
     }
 
     public int getId() {
@@ -51,13 +57,10 @@ public class Appointment {
         return time;
     }
 
-    public String getTypeOfAppointment() {
+    public int getTypeOfAppointment() {
         return typeOfAppointment;
     }
 
-    public String getResults() {
-        return results;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -79,11 +82,8 @@ public class Appointment {
         this.time = time;
     }
 
-    public void setTypeOfAppointment(String typeOfAppointment) {
+    public void setTypeOfAppointment(int typeOfAppointment) {
         this.typeOfAppointment = typeOfAppointment;
     }
 
-    public void setResults(String results) {
-        this.results = results;
-    }
 }

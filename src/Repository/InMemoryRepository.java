@@ -2,13 +2,13 @@ package Repository;
 
 import java.util.*;
 
-public class InMemoryRepository<T> implements Repository.IRepository<T> {
+public class InMemoryRepository<T> implements IRepository<T> {
     private Map<Integer, T> data = new HashMap<>();
     private int currentId = 1;
 
     @Override
     public void create(T entity) {
-        data.put(currentId++, entity);  // Increment currentId after putting
+        data.put(currentId++, entity);
     }
 
     @Override
@@ -20,8 +20,7 @@ public class InMemoryRepository<T> implements Repository.IRepository<T> {
     }
 
     @Override
-    public void update(T entity) {
-        Integer id = currentId;
+    public void update(int id, T entity) {
         if (data.containsKey(id)) {
             data.put(id, entity);
         } else {
@@ -38,5 +37,8 @@ public class InMemoryRepository<T> implements Repository.IRepository<T> {
     public List<T> findAll() {
         return new ArrayList<>(data.values());
     }
-
+    @Override
+    public Optional<T> findById(int id) {
+        return Optional.ofNullable(data.get(id));
+    }
 }

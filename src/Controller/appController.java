@@ -1,183 +1,156 @@
 package Controller;
 
 import model.*;
-import service.*;
+import service.Service;
+import java.time.LocalDate;
 import java.util.List;
+
+
 public class appController {
-    private AppointmentService appointmentService;
-    private DiseaseService diseaseService;
-    private HealthRecordService healthRecordService;
-    private VaccineService vaccineService;
-    private PetService petService;
-    private VeterinarianService veterinarianService;
-    private TestService testService;
-    private PetDiseaseService petDiseaseService;
-    private UserService userService;
-    private NotificationService notificationService;
 
-    public appController(AppointmentService appointmentService, DiseaseService diseaseService,
-                          HealthRecordService healthRecordService, VaccineService vaccineService, PetService petService,VeterinarianService veterinarianService, TestService testService, PetDiseaseService petDiseaseService, UserService userService, NotificationService notificationService) {
-        this.appointmentService = appointmentService;
-        this.diseaseService = diseaseService;
-        this.healthRecordService = healthRecordService;
-        this.vaccineService = vaccineService;
-        this.petService = petService;
-        this.veterinarianService = veterinarianService;
-        this.testService = testService;
-        this.petDiseaseService=petDiseaseService;
-        this.userService=userService;
-        this.notificationService=notificationService;
+    private final Service service;
+
+    public appController(Service service) {
+        this.service = service;
     }
 
-    public void addAppointment() {
-        appointmentService.addAppointment();
+    public boolean login(String username, String password) {
+        return service.login(username, password);
     }
 
-
-    public void listAppointments() {
-        appointmentService.listAppointments();
+    public void signIn(Pet pet) {
+        service.signIn(pet);
     }
 
-
-    public void addDisease(int id, String name, String type) {
-        diseaseService.addDisease(id, name, type);
-    }
-    public void addVaccine(int id, String name, String type) {
-        vaccineService.addVaccine();
+    public boolean resetPassword(String username, String newPassword) {
+        return service.resetPassword(username, newPassword);
     }
 
-
-    public void modifyTestFrequency(int diseaseId, int frequency) {
-        diseaseService.modifyTestFrequency(diseaseId, frequency);
-    }
-
-    public void modifyVaccineFrequency(int diseaseId, int frequency) {
-        diseaseService.modifyVaccineFrequency(diseaseId, frequency);
-    }
-
-    public void viewHealthRecord(Pet pet) {
-        healthRecordService.displayHealthRecord(pet);
-    }
-
-    public void registerUser() {
-        userService.registerUser();
-    }
-
-    public User loginUser() {
-        return userService.loginUser();
-    }
-
-    public void resetPassword() {
-        userService.resetPassword();
-    }
-
-    public void registerPet() {
-        userService.registerUser();
-
-        // După înregistrare, putem obține utilizatorul înregistrat (presupunând că login-ul este deja realizat sau că avem un obiect valid)
-        User user = userService.loginUser();  // Sau un alt mod de obținere a utilizatorului valid
-
-        // Verificăm dacă utilizatorul este valid
-        if (user != null) {
-            // Transmitem obiectul user către metoda registerPet din PetService
-            petService.registerPet(user);
-        } else {
-            System.out.println("Nu s-a putut înregistra animalul de companie, deoarece utilizatorul nu a fost valid.");
+    public void addAppointment(Appointment appointment) {
+        service.addAppointment(appointment);
+        Veterinarian vet = getVeterinarianForAppointment(appointment);
+        if (vet != null) {
+            sendNotificationToVet(vet, "New appointment with pet: " + appointment.getPet_id());
         }
     }
 
-    public void addDiseaseToPet(int petId, int diseaseId) {
-        petDiseaseService.addDiseaseToPet(petId, diseaseId);
+    public void cancelAppointment(int appointmentId) {
+        Appointment appointment = getAppointmentById(appointmentId);
+        if (appointment != null) {
+            service.cancelAppointment(appointmentId);
+            Pet pet = getPetById(appointment.getPet_id());
+            Veterinarian vet = getVeterinarianForAppointment(appointment);
+            sendNotificationToPet(pet, "Your appointment has been cancelled.");
+            sendNotificationToVet(vet, "An appointment has been cancelled.");
+        }
     }
 
-    public List<Disease> getDiseasesForPet(int petId) {
-        return petDiseaseService.getDiseasesForPet(petId);
+    public List<Appointment> seeAppointments(int userId) {
+        return service.seeAppointments(userId);
     }
 
-
-    public void sendVaccinationReminder(User user, Appointment appointment) {
-        notificationService.sendVaccinationReminder(user, appointment);
+    public void sendNotificationToVet(Veterinarian vet, String message) {
+        if (vet != null) {
+            vet.addNotification(message);
+        }
     }
 
-    public void sendTestReminder(User user, Appointment appointment) {
-        notificationService.sendTestReminder(user, appointment);
+    public void sendNotificationToPet(Pet pet, String message) {
+        if (pet != null) {
+            pet.addNotification(message);
+        }
     }
 
-    public void sendCancellationNotification(User user, Appointment appointment) {
-        notificationService.sendCancellationNotification(user, appointment);
+    public List<String> seeFutureTestsAndVaccines(int petId, LocalDate date) {
+        return service.seeFutureTestsAndVaccines(petId, date);
     }
 
-    public void remindUpcomingAppointment(User user, Appointment appointment) {
-        notificationService.remindUpcomingAppointment(user, appointment);
+    public void deleteAccount(int userId, boolean isPet) {
+        service.deleteAccount(userId, isPet);
     }
 
-    public void addVaccine() {
-        vaccineService.addVaccine();
+    public void addDiseaseForPet(int petId, Disease disease) {
+        service.addDiseaseForPet(petId, disease);
     }
 
-    public void addVaccineToAppointment(Appointment appointment, Vaccine vaccine) {
-        vaccineService.addVaccineToAppointment(appointment, vaccine);
+    public void modifyAppointmentForPet(int appointmentId, Appointment updatedAppointment) {
+        service.modifyAppointmentForPet(appointmentId, updatedAppointment);
     }
 
-    public void listVaccinesForAppointment(Appointment appointment) {
-        vaccineService.listVaccinesForAppointment(appointment);
+    // Methods for retrieving entities by ID (helper methods)
+    private Pet getPetById(int petId) {
+        return service.getPetRepository().read(petId);
     }
 
-    public void addTestToAppointment(Appointment appointment, Test test) {
-        testService.addTestToAppointment(appointment, test);
+    private Veterinarian getVeterinarianForAppointment(Appointment appointment) {
+        return service.getVetRepository().read(appointment.getVet_id());
     }
 
-    public void listTestsForAppointment(Appointment appointment) {
-        testService.listTestsForAppointment(appointment);
+    private Appointment getAppointmentById(int appointmentId) {
+        return service.getAppointmentRepository().read(appointmentId);
     }
 
-    public void addVeterinarian(Veterinarian veterinarian) {
-        veterinarianService.addVeterinarian(veterinarian);
+    public void createDisease(Disease disease) {
+        service.createDisease(disease);
     }
 
-    public void displayAvailableDatesAndTimes(int vetId) {
-        veterinarianService.displayAvailableDatesAndTimes(vetId);
+    public Disease getDisease(int diseaseId) {
+        return service.getDisease(diseaseId);
     }
 
-
-    public void getAllDiseases(){
-        diseaseService.getAllDiseases();
+    public void updateDisease(int diseaseId, Disease disease) {
+        service.updateDisease(diseaseId, disease);
     }
 
-    public void getRecommendedTestFrequency(int diseaseId){
-        diseaseService.getRecommendedTestFrequency(diseaseId);
+    public void deleteDisease(int diseaseId) {
+        service.deleteDisease(diseaseId);
     }
 
-    public void getRecommendedVaccineFrequency(int diseaseId){
-        diseaseService.getRecommendedVaccineFrequency(diseaseId);
-    }
-    public void addHealthRecord(Pet pet) {
-    healthRecordService.addHealthRecord(pet);
+    public List<Disease> getAllDiseases() {
+        return service.getAllDiseases();
     }
 
-    public void getHealthRecordByPet(Pet pet) {
-        healthRecordService.getHealthRecordByPet(pet);
+    public void createVaccine(Vaccine vaccine) {
+        service.createVaccine(vaccine);
     }
 
-    public void addAppointmentToHealthRecord(Pet pet, Appointment appointment){
-        healthRecordService.addAppointmentToHealthRecord(pet, appointment);
+    public Vaccine getVaccine(int vaccineId) {
+        return service.getVaccine(vaccineId);
     }
-    public void displayHealthRecord(Pet pet){
-        healthRecordService.displayHealthRecord(pet);
+
+    public void updateVaccine(int vaccineId, Vaccine vaccine) {
+        service.updateVaccine(vaccineId, vaccine);
     }
-    public void listNotifications(){
-        notificationService.listNotifications();
+
+    public void deleteVaccine(int vaccineId) {
+        service.deleteVaccine(vaccineId);
     }
-    public void findPetById(int id){
-        petService.findPetById(id);
+
+    public List<Vaccine> getAllVaccines() {
+        return service.getAllVaccines();
     }
-    public void DisplayAllPets(){
-        petService.DisplayAllPets();
+
+    public void createTest(Test test) {
+        service.createTest(test);
     }
-    public void getVeterinarians(){
-        veterinarianService.getVeterinarians();
+
+    public Test getTest(int testId) {
+        return service.getTest(testId);
     }
-    public void getVeterinarianById(int id){
-        veterinarianService.getVeterinarianById(id);
+
+    public void updateTest(int testId, Test test) {
+        service.updateTest(testId, test);
+    }
+
+    public void deleteTest(int testId) {
+        service.deleteTest(testId);
+    }
+
+    public List<Test> getAllTests() {
+        return service.getAllTests();
+    }
+
+    public void notifyAndCancelAppointmentsForVacation(int vetId, LocalDate startDate, LocalDate endDate) {
+        service.notifyAndCancelAppointmentsForVacation(vetId, startDate, endDate);
     }
 }
