@@ -52,14 +52,25 @@ public class UI {
         String username = scanner.nextLine();
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
+        System.out.print("Enter Id: ");
+        Integer id = scanner.nextInt();
 
-        if (appController.login(username, password)) {
+        boolean isLoggedIn = appController.login(username, password);
+        if (isLoggedIn) {
             System.out.println("Login successful!");
-            selectUserType();
-        } else {
-            System.out.println("Invalid credentials. Please try again.");
+            boolean isVet = appController.getAllVeterinarians().stream().anyMatch(vet -> vet.getUsername().equals(username));
+            if (isVet) {
+                veterinarianMenu(id);
+            } else {
+                petOwnerMenu(id);
+            }
         }
+
     }
+
+
+
+
 
     private void signUpMenu() {
         System.out.println("==== Sign In ====" );
@@ -107,7 +118,7 @@ public class UI {
             return;
         }
 
-        System.out.println("Sign-up successful!");
+        System.out.println("hello!");
     }
 
     private void selectUserType() {
@@ -164,7 +175,8 @@ public class UI {
                     notifyAndCancelAppointments(vetId);
                     break;
                 case "4":
-                    deleteAccount(vetId, true);  // Veterinarian account deletion
+                    deleteAccount(vetId, false);
+                    running = false;
                     break;
                 case "0":
                     System.out.println("Logging out...");

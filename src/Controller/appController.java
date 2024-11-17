@@ -25,6 +25,10 @@ public class appController {
         service.signInVet(veterinarian);
     }
 
+    public List<Veterinarian> getAllVeterinarians() {
+        return service.getAllVeterinarians();
+    }
+
     public boolean resetPassword(String username, String newPassword) {
         return service.resetPassword(username, newPassword);
     }
