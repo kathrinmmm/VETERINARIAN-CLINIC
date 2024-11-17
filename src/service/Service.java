@@ -53,16 +53,21 @@ public class Service {
                 new Vaccine(1, "Rabies Vaccine", "Rabies",9),
                 new Vaccine(2, "Distemper Vaccine", "Canine Distemper",6),
                 new Vaccine(3, "Feline Leukemia Vaccine", "Feline Leukemia",14),
-                new Vaccine(4, "Parrot Fever Vaccine", "Psittacosis",10)
+                new Vaccine(4, "Parrot Fever Vaccine", "Psittacosis",10),
+                new Vaccine(5, "NULL", "NULL",0)
         );
 
         List<Test> tests = List.of(
                 new Test(1, "Blood Test"),
                 new Test(2, "X-Ray"),
                 new Test(3, "Ultrasound"),
-                new Test(4, "Allergy Test")
+                new Test(4, "Allergy Test"),
+                new Test(5, "NULL")
         );
 
+    }
+    public Map<String, List<String>> getSpeciesToBreeds() {
+        return speciesToBreeds;
     }
 
     public void createPet(Pet pet) {
@@ -185,8 +190,12 @@ public class Service {
                 vetRepository.findAll().stream().anyMatch(vet -> vet.getUsername().equals(username) && vet.getPassword().equals(password));
     }
 
-    public void signIn(Pet pet) {
+
+    public void signInPet(Pet pet) {
         petRepository.create(pet);
+    }
+    public void signInVet(Veterinarian vet) {
+        vetRepository.create(vet);
     }
 
     public boolean resetPassword(String username, String newPassword) {
@@ -205,9 +214,40 @@ public class Service {
         return false;
     }
 
-    public void addAppointment(Appointment appointment) {
-        appointmentRepository.create(appointment);
+    public void addAppointment(Appointment appointment, List<Integer> vaccineIds, List<Integer> testIds) {
+        Pet pet = petRepository.read(appointment.getPet_id());
+
+        if (pet != null) {
+            List<Vaccine> selectedVaccines = vaccineIds.stream()
+                    .map(vaccineRepository::read)
+                    .filter(vaccine -> vaccine != null)
+                    .collect(Collectors.toList());
+            appointment.setVaccines(selectedVaccines);
+
+            List<Test> selectedTests = testIds.stream()
+                    .map(testRepository::read)
+                    .filter(test -> test != null)
+                    .collect(Collectors.toList());
+            appointment.setTests(selectedTests);
+
+            appointmentRepository.create(appointment);
+
+            HealthRecord healthRecord = healthRecordRepository.findAll().stream()
+                    .filter(hr -> hr.getPetId() == appointment.getPet_id())
+                    .findFirst()
+                    .orElseGet(() -> {
+                        HealthRecord newRecord = new HealthRecord(pet.getUser_id());
+                        healthRecordRepository.create(newRecord);
+                        return newRecord;
+                    });
+
+            healthRecord.getVaccines().addAll(selectedVaccines);
+            healthRecord.getTests().addAll(selectedTests);
+
+            healthRecordRepository.update(healthRecord.getPetId(), healthRecord);
+        }
     }
+
     public Appointment getAppointment(int appointmentId) {
         return appointmentRepository.read(appointmentId);
     }

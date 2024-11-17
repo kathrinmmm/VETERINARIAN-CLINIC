@@ -1,7 +1,9 @@
+import Controller.appController;
 import Repository.*;
 import service.Service;
 import model.*;
 import UI.UI;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,8 +27,11 @@ public class Main {
                 testRepository
         );
 
-        UI ui = new UI(service);
 
-        ui.mainMenu();
+        Scanner scanner = new Scanner(System.in);
+        UI ui = new UI(new appController(service), scanner);
+
+
+        ui.run();
     }
 }

@@ -13,7 +13,7 @@ public class Pet extends User {
     private List<Appointment> appointments;
 
     public Pet(int id, String petName, String username, String password) {
-        super(id, "", "", "", username, password, "Pet"); // Empty strings for firstName, lastName, and email
+        super(id, "", "", "", username, password, "Pet");
         this.petName = petName;
         this.birthDate = birthDate;
         this.gender = gender;

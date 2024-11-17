@@ -18,21 +18,27 @@ public class appController {
         return service.login(username, password);
     }
 
-    public void signIn(Pet pet) {
-        service.signIn(pet);
+    public void signInPet(Pet pet) {
+        service.signInPet(pet);
+    }
+    public void signInVet(Veterinarian veterinarian) {
+        service.signInVet(veterinarian);
     }
 
     public boolean resetPassword(String username, String newPassword) {
         return service.resetPassword(username, newPassword);
     }
 
-    public void addAppointment(Appointment appointment) {
-        service.addAppointment(appointment);
-        Veterinarian vet = getVeterinarianForAppointment(appointment);
-        if (vet != null) {
-            sendNotificationToVet(vet, "New appointment with pet: " + appointment.getPet_id());
+    public void addAppointment(Appointment appointment, List<Integer> vaccineIds, List<Integer> testIds) {
+        if (appointment != null && !vaccineIds.isEmpty() && !testIds.isEmpty()) {
+            service.addAppointment(appointment, vaccineIds, testIds);
+
+            System.out.println("Appointment processed successfully for pet ID: " + appointment.getPet_id());
+        } else {
+            System.out.println("Invalid appointment data or empty vaccine/test lists.");
         }
     }
+
 
     public void cancelAppointment(int appointmentId) {
         Appointment appointment = getAppointmentById(appointmentId);
