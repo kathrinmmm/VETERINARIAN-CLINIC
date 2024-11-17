@@ -79,15 +79,14 @@ public class appController {
         service.deleteAccount(userId, isPet);
     }
 
-    public void addDiseaseForPet(int petId, Disease disease) {
-        service.addDiseaseForPet(petId, disease);
+    public void addDiseaseForPet(int petId, int id) {
+        service.addDiseaseForPet(petId, id);
     }
 
     public void modifyAppointmentForPet(int appointmentId, Appointment updatedAppointment) {
         service.modifyAppointmentForPet(appointmentId, updatedAppointment);
     }
 
-    // Methods for retrieving entities by ID (helper methods)
     private Pet getPetById(int petId) {
         return service.getPetRepository().read(petId);
     }

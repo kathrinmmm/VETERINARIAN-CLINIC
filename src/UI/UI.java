@@ -64,6 +64,9 @@ public class UI {
             } else {
                 petOwnerMenu(id);
             }
+        }else{
+            System.out.println("Login failed! Wrong username or password.");
+
         }
 
     }
@@ -169,7 +172,7 @@ public class UI {
                     viewAppointments(vetId);
                     break;
                 case "2":
-                    addDiseaseToPet(vetId);
+                    addDiseaseToPet();
                     break;
                 case "3":
                     notifyAndCancelAppointments(vetId);
@@ -234,7 +237,12 @@ public class UI {
         appointments.forEach(appointment -> System.out.println(appointment.toString()));
     }
 
-    private void addDiseaseToPet(int vetId) {
+    private void addDiseaseToPet() {
+        System.out.print("Enter Pet Id: ");
+        Integer petId = scanner.nextInt();
+        System.out.print("Enter Disease Id: ");
+        Integer diseaseId = scanner.nextInt();
+        appController.addDiseaseForPet(petId, diseaseId);
 
     }
 

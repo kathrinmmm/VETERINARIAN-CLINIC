@@ -192,7 +192,10 @@ public class Service {
 
 
     public void signInPet(Pet pet) {
+
         petRepository.create(pet);
+        HealthRecord healthRecord = new HealthRecord(pet.getUser_id());
+        healthRecordRepository.create(healthRecord);
     }
     public void signInVet(Veterinarian vet) {
         vetRepository.create(vet);
@@ -214,9 +217,42 @@ public class Service {
         return false;
     }
 
+//    public void addAppointment(Appointment appointment, List<Integer> vaccineIds, List<Integer> testIds) {
+//        Pet pet = petRepository.read(appointment.getPet_id());
+//
+//        if (pet != null) {
+//            List<Vaccine> selectedVaccines = vaccineIds.stream()
+//                    .map(vaccineRepository::read)
+//                    .filter(vaccine -> vaccine != null)
+//                    .collect(Collectors.toList());
+//            appointment.setVaccines(selectedVaccines);
+//
+//            List<Test> selectedTests = testIds.stream()
+//                    .map(testRepository::read)
+//                    .filter(test -> test != null)
+//                    .collect(Collectors.toList());
+//            appointment.setTests(selectedTests);
+//
+//            appointmentRepository.create(appointment);
+//
+//            HealthRecord healthRecord = healthRecordRepository.findAll().stream()
+//                    .filter(hr -> hr.getPetId() == appointment.getPet_id())
+//                    .findFirst()
+//                    .orElseGet(() -> {
+//                        HealthRecord newRecord = new HealthRecord(pet.getUser_id());
+//                        healthRecordRepository.create(newRecord);
+//                        return newRecord;
+//                    });
+//
+//            healthRecord.getVaccines().addAll(selectedVaccines);
+//            healthRecord.getTests().addAll(selectedTests);
+//
+//            healthRecordRepository.update(healthRecord.getPetId(), healthRecord);
+//        }
+//    }
+
     public void addAppointment(Appointment appointment, List<Integer> vaccineIds, List<Integer> testIds) {
         Pet pet = petRepository.read(appointment.getPet_id());
-
         if (pet != null) {
             List<Vaccine> selectedVaccines = vaccineIds.stream()
                     .map(vaccineRepository::read)
@@ -230,21 +266,23 @@ public class Service {
                     .collect(Collectors.toList());
             appointment.setTests(selectedTests);
 
-            appointmentRepository.create(appointment);
-
             HealthRecord healthRecord = healthRecordRepository.findAll().stream()
                     .filter(hr -> hr.getPetId() == appointment.getPet_id())
                     .findFirst()
-                    .orElseGet(() -> {
-                        HealthRecord newRecord = new HealthRecord(pet.getUser_id());
-                        healthRecordRepository.create(newRecord);
-                        return newRecord;
-                    });
+                    .orElse(null);
 
-            healthRecord.getVaccines().addAll(selectedVaccines);
-            healthRecord.getTests().addAll(selectedTests);
+            if (healthRecord == null) {
+                healthRecord = new HealthRecord(pet.getUser_id());
+                healthRecord.getVaccines().addAll(selectedVaccines);
+                healthRecord.getTests().addAll(selectedTests);
+                healthRecordRepository.create(healthRecord);
+            } else {
+                healthRecord.getVaccines().addAll(selectedVaccines);
+                healthRecord.getTests().addAll(selectedTests);
+                healthRecordRepository.update(healthRecord.getPetId(), healthRecord);
+            }
 
-            healthRecordRepository.update(healthRecord.getPetId(), healthRecord);
+            appointmentRepository.create(appointment);
         }
     }
 
@@ -344,21 +382,34 @@ public class Service {
     }
 
 
-    public void addDiseaseForPet(int petId, Disease disease) {
+    public void addDiseaseForPet(int petId, int diseaseId) {
         Pet pet = petRepository.read(petId);
-        if (pet != null) {
-            HealthRecord healthRecord = healthRecordRepository.findAll().stream()
-                    .filter(hr -> hr.getPetId() == petId)
-                    .findFirst()
-                    .orElse(null);
 
-            if (healthRecord != null) {
-                healthRecord.getDiseases().add(disease);
+        HealthRecord healthRecord = healthRecordRepository.findAll().stream()
+                .filter(hr -> hr.getPetId() == petId)
+                .findFirst()
+                .orElse(null);
 
-                healthRecordRepository.update(healthRecord.getPetId(), healthRecord);
-            }
-        }
+        Disease disease = getDiseaseById(diseaseId);
+
+        healthRecord.getDiseases().add(disease);
+
+        healthRecordRepository.update(healthRecord.getPetId(), healthRecord);
     }
+
+    private Disease getDiseaseById(int diseaseId) {
+        List<Disease> diseases = List.of(
+                new Disease(1, "Canine Parvovirus", "A highly contagious viral disease in dogs."),
+                new Disease(2, "Rabies", "A viral disease affecting the nervous system."),
+                new Disease(3, "Feline Leukemia", "A common cause of cancer in cats."),
+                new Disease(4, "Psittacosis", "A bacterial infection in birds.")
+        );
+        return diseases.stream()
+                .filter(disease -> disease.getId() == diseaseId)
+                .findFirst()
+                .orElse(null);
+    }
+
 
     public void modifyAppointmentForPet(int appointmentId, Appointment updatedAppointment) {
         Appointment existingAppointment = appointmentRepository.read(appointmentId);
