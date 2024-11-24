@@ -9,18 +9,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import Utils.*;
+/**
+ * The {@code UI} class represents the user interface for interacting with the system.
+ * It handles login, sign-in, and service operations for pets and veterinarians, as well as
+ * providing menus for various functionalities such as viewing tests, vaccines, and diseases.
+ */
 public class UI {
 
     private final Controller Controller;
     private final Scanner scanner;
     private Integer currentPetId = null;
     private Integer currentVetId = null;
-
+    /**
+     * Constructs a {@code UI} instance.
+     *
+     * @param Controller the controller that handles business logic
+     * @param scanner the scanner object to read user input
+     */
     public UI(Controller Controller, Scanner scanner) {
         this.Controller = Controller;
         this.scanner = scanner;
     }
-
+    /**
+     * Starts the main menu loop and provides options for the user to interact with the system.
+     * Options include logging in, signing up, accessing services, or exiting the application.
+     */
     public void run() {
         boolean running = true;
         while (running) {
@@ -48,7 +61,10 @@ public class UI {
             }
         }
     }
-
+    /**
+     * Provides the login menu where users can enter their username and password to log in
+     * as a Pet or Veterinarian. If login is successful, the appropriate menu for the user type is displayed.
+     */
     private void LogInMenu() {
         System.out.println("Login Menu:");
         System.out.print("Enter Username: ");
@@ -78,6 +94,11 @@ public class UI {
         }
     }
 
+    /**
+     * Provides the sign-in menu where users can sign up as either a Pet or Veterinarian.
+     * This menu collects necessary information such as name, username, password, and type (for both Pets and Veterinarians).
+     * After successful registration, the user is logged in and their respective menu is shown.
+     */
 
     private void SignInMenu() {
         System.out.println("Sign In Menu:");
@@ -132,7 +153,11 @@ public class UI {
             System.out.println("Invalid option. Please enter 'Pet' or 'Vet'.");
         }
     }
-
+    /**
+     * Provides the service menu where users can add new tests, vaccines, or diseases,
+     * or view the list of available tests, vaccines, diseases, or appointments.
+     * This menu allows the user to interact with various service-related functionalities.
+     */
     private void ServiceMenu() {
         boolean running = true;
         while (running) {
@@ -278,7 +303,11 @@ public class UI {
         }
     }
 
-
+    /**
+     * Displays the pet menu, allowing the pet user to view and manage appointments, notifications, and health records.
+     *
+     * @param pet the pet object representing the logged-in pet
+     */
     private void showPetMenu(Pet pet) {
         boolean runningPetMenu = true;
         while (runningPetMenu) {
@@ -429,7 +458,11 @@ public class UI {
             }
         }
     }
-
+    /**
+     * Displays the veterinarian menu, allowing the vet user to manage appointments, health records, and notifications for pets.
+     *
+     * @param vet the veterinarian object representing the logged-in vet
+     */
     private void showVetMenu(Veterinarian vet) {
         boolean runningVetMenu = true;
         while (runningVetMenu) {

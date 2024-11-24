@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
+/**
+ * Service class that acts as an intermediary between the repositories and the user interface.
+ * It provides methods for managing pets, veterinarians, appointments, health records, diseases, vaccines, tests, notifications, and user authentication.
+ */
 public class Service {
     private final IRepository<Pet> petRepository;
     private final IRepository<Veterinarian> vetRepository;
@@ -24,7 +27,19 @@ public class Service {
     private final IRepository<Notification> notificationRepository;
     private final IRepository<User> userRepository;
     private Integer loggedInUserId = null;
-
+    /**
+     * Constructs a Service object with the specified repositories for various entities.
+     *
+     * @param petRepo            The repository for managing pets.
+     * @param vetRepo            The repository for managing veterinarians.
+     * @param appRepo            The repository for managing appointments.
+     * @param hrRepo             The repository for managing health records.
+     * @param diseaseRepository  The repository for managing diseases.
+     * @param vaccineRepository  The repository for managing vaccines.
+     * @param testRepository     The repository for managing tests.
+     * @param notificationRepository The repository for managing notifications.
+     * @param userRepository     The repository for managing users.
+     */
     public Service(IRepository<Pet> petRepo, IRepository<Veterinarian> vetRepo, IRepository<Appointment> appRepo, IRepository<HealthRecord> hrRepo, IRepository<Disease> diseaseRepository, IRepository<Vaccine> vaccineRepository, IRepository<Test> testRepository, IRepository<Notification> notificationRepository, IRepository<User> userRepository) {
         this.petRepository = petRepo;
         this.vetRepository = vetRepo;
@@ -38,7 +53,9 @@ public class Service {
         initializeRepositories();
         this.loggedInUserId = null;
     }
-
+    /**
+     * Initializes sample data in the repositories for pets, veterinarians, health records, diseases, vaccines, tests, and appointments.
+     */
     public void initializeRepositories() {
         Pet pet1=new Pet(1,"Miti","Mitisor22","1234",AnimalType.CAT);
         Pet pet2=new Pet(2,"Bella","andreea25","123",AnimalType.DOG);
@@ -147,18 +164,36 @@ public class Service {
         hr1.addAppointment(app1);
         hr2.addAppointment(app2);
     }
+    /**
+     * Deletes a pet by its ID from the pet repository.
+     *
+     * @param id The ID of the pet to be deleted.
+     */
+
     public void deletePet(Integer id){
         petRepository.delete(id);
     }
-
+    /**
+     * Deletes a veterinarian by its ID from the veterinarian repository.
+     *
+     * @param id The ID of the veterinarian to be deleted.
+     */
     public void deleteVet(Integer id){
         vetRepository.delete(id);
     }
-
+    /**
+     * Deletes an appointment by its ID from the appointment repository.
+     *
+     * @param id The ID of the appointment to be deleted.
+     */
     public void deleteApp(Integer id){
         appointmentRepository.delete(id);
     }
-
+    /**
+     * Adds a new pet to the pet repository.
+     *
+     * @param pet The pet to be added.
+     */
     public void addPet(Pet pet) {
         pet.setId(IdGenerator.generatePetId());
         petRepository.create(pet);
@@ -166,10 +201,21 @@ public class Service {
         healthRecordRepository.create(healthRecord);
 
     }
+    /**
+     * Adds a new veterinarian to the veterinarian repository.
+     *
+     * @param vet The veterinarian to be added.
+     */
+
     public void addVeterinarian(Veterinarian vet) {
         vet.setId(IdGenerator.generateVetId());
         vetRepository.create(vet);
     }
+    /**
+     * Adds a new appointment to the appointment repository and associates it with the appropriate health record.
+     *
+     * @param app The appointment to be added.
+     */
     public void addAppointment(Appointment app) {
         app.setAppId(IdGenerator.getAppId());
         appointmentRepository.create(app);
@@ -182,11 +228,22 @@ public class Service {
             healthRecord.addAppointment(app);
         }
     }
+    /**
+     * Adds a new disease to the disease repository.
+     *
+     * @param disease The disease to be added.
+     */
+
     public void addDisease(Disease disease){
         disease.setId(IdGenerator.getDiseaseId());
         diseaseRepository.create(disease);
     }
-
+    /**
+     * Adds a disease to a specific pet's health record.
+     *
+     * @param petId   The ID of the pet.
+     * @param disease The disease to be added.
+     */
     public void addDiseaseToPet(int petId, Disease disease) {
         HealthRecord healthRecord = healthRecordRepository.getAll().stream()
                 .filter(hr -> hr.getPetId()==(petId))
@@ -198,74 +255,151 @@ public class Service {
         }
     }
 
-
+    /**
+     * Retrieves a pet's health record by its ID.
+     *
+     * @param petId The ID of the pet whose health record is to be retrieved.
+     * @return The health record of the pet.
+     */
     public HealthRecord getHealthRecordByPetId(int petId) {
         return healthRecordRepository.getAll().stream()
                 .filter(hr -> hr.getPetId()==(petId))
                 .findFirst()
                 .orElse(null);
     }
+    /**
+     * Adds a new vaccine to the vaccine repository.
+     *
+     * @param vaccine The vaccine to be added.
+     */
 
     public void addVaccine(Vaccine vaccine){
         vaccine.setId(IdGenerator.getVaccineId());
         vaccineRepository.create(vaccine);
     }
-
+    /**
+     * Adds a new test to the test repository.
+     *
+     * @param test The test to be added.
+     */
     public void addTest(Test test){
         test.setId(IdGenerator.getTestId());
         testRepository.create(test);
     }
-
+    /**
+     * Adds a new notification to the notification repository.
+     *
+     * @param n The notification to be added.
+     */
     public void addNotification(Notification n) {
         notificationRepository.create(n);
     }
+    /**
+     * Retrieves a list of all pets in the repository.
+     *
+     * @return A list of all pets.
+     */
+
     public List<Pet> getAllPets() {
         return petRepository.getAll();
     }
+    /**
+     * Retrieves a list of all veterinarians in the repository.
+     *
+     * @return A list of all veterinarians.
+     */
 
     public List<Veterinarian> getAllVeterinarians() {
         return vetRepository.getAll();
     }
+    /**
+     * Retrieves a list of all diseases in the repository.
+     *
+     * @return A list of all diseases.
+     */
 
     public List<Disease> getAllDiseases(){
         return diseaseRepository.getAll();
     }
+    /**
+     * Retrieves a list of all tests in the repository.
+     *
+     * @return A list of all tests.
+     */
 
     public List<Test> getAllTests(){
         return testRepository.getAll();
     }
+    /**
+     * Retrieves a list of all appointments in the repository.
+     *
+     * @return A list of all appointments.
+     */
     public List<Appointment> getAllAppointments(){
         return appointmentRepository.getAll();
     }
+    /**
+     * Retrieves a list of all vaccines in the repository.
+     *
+     * @return A list of all vaccines.
+     */
     public List<Vaccine> getAllVaccines(){
         return vaccineRepository.getAll();
     }
-
+    /**
+     * Retrieves a list of appointments for a specific date.
+     *
+     * @param date The date for which appointments are to be retrieved.
+     * @return A list of appointments on the specified date.
+     */
     public List<Appointment> getAppointmentsByDate(String date) {
         return appointmentRepository.getAll().stream()
                 .filter(app -> app.getDate().equals(date))
                 .collect(Collectors.toList());
     }
-
+    /**
+     * Retrieves a list of appointments for a specific pet.
+     *
+     * @param petId The ID of the pet for which appointments are to be retrieved.
+     * @return A list of appointments for the specified pet.
+     */
     public List<Appointment> getAppointmentsByPet(int petId) {
         return appointmentRepository.getAll().stream()
                 .filter(app -> app.getPetId() == petId)
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Retrieves a list of appointments for a specific veterinarian.
+     *
+     * @param vetId The ID of the veterinarian for which appointments are to be retrieved.
+     * @return A list of appointments for the specified veterinarian.
+     */
     public List<Appointment> getAppointmentsByVet(int vetId) {
         return appointmentRepository.getAll().stream()
                 .filter(app -> app.getVetId() == vetId)
                 .collect(Collectors.toList());
     }
-
+    /**
+     * Retrieves a list of notifications for a specific user.
+     *
+     * @param userId The ID of the user for which notifications are to be retrieved.
+     * @return A list of notifications for the specified user.
+     */
     public List<Notification> getNotificationsByUserId(int userId) {
         return notificationRepository.getAll().stream()
                 .filter(notification -> notification.getUserId() == userId)
                 .collect(Collectors.toList());
     }
-
+    /**
+     * Sends a notification to a user.
+     * This method creates a new notification with the provided message and notification type,
+     * then stores it in the repository for the given user.
+     *
+     * @param userId The ID of the user to whom the notification will be sent.
+     * @param message The content of the notification.
+     * @param notificationType The type of notification (e.g., reminder, vacation, etc.).
+     */
     public void sendNotificationToUser(Integer userId, String message, NotificationType notificationType) {
         Notification notification = new Notification(
                 IdGenerator.getNotifId(),
@@ -277,7 +411,12 @@ public class Service {
         addNotification(notification);
     }
 
-
+    /**
+     * Clears all notifications for a specific user.
+     * This method removes all notifications associated with the given user ID from the repository.
+     *
+     * @param userId The ID of the user whose notifications should be cleared.
+     */
     public void clearNotificationsByUserId(int userId) {
         List<Notification> notificationsToRemove = notificationRepository.getAll().stream()
                 .filter(notification -> notification.getUserId() == userId)
@@ -287,13 +426,25 @@ public class Service {
             notificationRepository.delete(notification.getId());
         }
     }
-
+    /**
+     * Retrieves all notifications of a specific type.
+     * This method filters the notifications repository to find notifications that match the given type.
+     *
+     * @param type The type of notifications to retrieve (e.g., reminders, alerts, etc.).
+     * @return A list of notifications matching the specified type.
+     */
     public List<Notification> getNotificationsByType(NotificationType type) {
         return notificationRepository.getAll().stream()
                 .filter(notification -> notification.getNotificationType() == type)
                 .collect(Collectors.toList());
     }
-
+    /**
+     * Sends reminders for upcoming appointments for a specific pet.
+     * This method checks all appointments for the specified pet and returns those that are within the next 3 days.
+     *
+     * @param petId The ID of the pet for which appointment reminders should be sent.
+     * @return A list of appointments that are scheduled within the next 3 days.
+     */
     public List<Appointment> sendAppointmentReminders(Integer petId) {
         List<Appointment> appointments = getAllAppointments();
         LocalDate today = LocalDate.now();
@@ -308,12 +459,27 @@ public class Service {
 
         return upcomingAppointments;
     }
+    /**
+     * Sends a vacation notification to a user.
+     * This method creates a notification informing the user that their pet's next scheduled appointment
+     * is during the vacation period and sends it to the user.
+     *
+     * @param userId The ID of the user to be notified.
+     */
     private void sendVacationNotification(Integer userId) {
         String message = "Vacation: Your pet's next scheduled appointment is during our vacation period.";
         sendNotificationToUser(userId, message, NotificationType.VACATION);
     }
 
-
+    /**
+     * Cancels all appointments for a veterinarian within a specified date range.
+     * This method identifies and deletes appointments for a given veterinarian that fall within the specified start and end dates.
+     * If appointments are canceled, a vacation notification is sent to affected users.
+     *
+     * @param vetId The ID of the veterinarian whose appointments should be canceled.
+     * @param startDateStr The start date of the period in "dd-MM-yyyy" format.
+     * @param endDateStr The end date of the period in "dd-MM-yyyy" format.
+     */
     public void cancelAppointmentsForVetInPeriod(Integer vetId, String startDateStr, String endDateStr) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
@@ -335,7 +501,13 @@ public class Service {
         }
     }
 
-
+    /**
+     * Allows a user to log in with a username and password.
+     *
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @return The logged-in user if authentication is successful, otherwise null.
+     */
     public Object login(String username, String password) throws Exception {
         Pet pet = petRepository.getAll().stream()
                 .filter(p -> p.getUsername().equals(username) && p.getPassword().equals(password))
@@ -360,7 +532,11 @@ public class Service {
         throw new Exception("Invalid username or password.");
     }
 
-
+    /**
+     * Retrieves the logged-in user's ID.
+     *
+     * @return The ID of the logged-in user.
+     */
     public Integer getLoggedInUserId() {
         return loggedInUserId;
     }
