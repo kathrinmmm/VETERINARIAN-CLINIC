@@ -1,7 +1,7 @@
-import Controller.appController;
+import Controller.Controller;
 import Repository.*;
-import service.Service;
-import model.*;
+import Service.Service;
+import Model.*;
 import UI.UI;
 import java.util.Scanner;
 
@@ -16,6 +16,7 @@ public class Main {
         IRepository<Vaccine> vaccineRepository = new InMemoryRepository<>();
         IRepository<HealthRecord> healthRecordRepository = new InMemoryRepository<>();
         IRepository<Pet_Disease> petDiseaseRepository = new InMemoryRepository<>();
+        IRepository<Notification> notificationRepository = new InMemoryRepository<>();
 
         Service service = new Service(
                 petRepository,
@@ -24,14 +25,16 @@ public class Main {
                 healthRecordRepository,
                 diseaseRepository,
                 vaccineRepository,
-                testRepository
+                testRepository,
+                notificationRepository
         );
 
 
         Scanner scanner = new Scanner(System.in);
-        UI ui = new UI(new appController(service), scanner);
+        UI ui = new UI(new Controller(service), scanner);
 
 
         ui.run();
+        scanner.close();
     }
 }
