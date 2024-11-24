@@ -1,286 +1,609 @@
-//package UI;
-//
-//import Model.*;
-//import Controller.Controller;
-//import java.time.LocalDate;
-//import java.util.List;
-//import java.util.Scanner;
-//
-//public class UI {
-//    private int vetIdCounter = 1;
-//    private int petOwnerIdCounter = 1;
-//    private final Controller appController;  // Using appController instead of Service
-//    private final Scanner scanner;
-//
-//    public UI(Controller appController, Scanner scanner) {
-//        this.appController = appController;
-//        this.scanner = scanner;
-//    }
-//
-//    public void run() {
-//        boolean running = true;
-//
-//        while (running) {
-//            System.out.println("\nMain Menu:");
-//            System.out.println("1. Login");
-//            System.out.println("2. Sign-in");
-//            System.out.println("3. Exit");
-//            System.out.print("Choose an option: ");
-//
-//            String choice = scanner.nextLine();
-//            switch (choice) {
-//                case "1":
-//                    loginMenu();
-//                    break;
-//                case "2":
-//                    signUpMenu();
-//                    break;
-//                case "3":
-//                    System.out.println("Exiting... Goodbye!");
-//                    running = false;
-//                    break;
-//                default:
-//                    System.out.println("Invalid selection. Please choose 1, 2, or 3.");
-//                    break;
-//            }
-//        }
-//    }
-//
-//    private void loginMenu() {
-//        System.out.print("Enter username: ");
-//        String username = scanner.nextLine();
-//        System.out.print("Enter password: ");
-//        String password = scanner.nextLine();
-//        System.out.print("Enter Id: ");
-//        Integer id = scanner.nextInt();
-//
-//        boolean isLoggedIn = appController.login(username, password);
-//        if (isLoggedIn) {
-//            System.out.println("Login successful!");
-//            boolean isVet = appController.getAllVeterinarians().stream().anyMatch(vet -> vet.getUsername().equals(username));
-//            if (isVet) {
-//                veterinarianMenu(id);
-//            } else {
-//                petOwnerMenu(id);
-//            }
-//        }else{
-//            System.out.println("Login failed! Wrong username or password.");
-//
-//        }
-//
-//    }
-//
-//
-//
-//    private void signUpMenu() {
-//        System.out.println("==== Sign In ====" );
-//        System.out.print("What are you?: ");
-//        System.out.println("1. Veterinarian");
-//        System.out.println("2. Pet Owner");
-//
-//        int userType = scanner.nextInt();
-//        scanner.nextLine();
-//
-//        System.out.print("Enter Username: ");
-//        String username = scanner.nextLine();
-//        System.out.print("Enter Password: ");
-//        String password = scanner.nextLine();
-//
-//        if (userType == 1) {
-//            System.out.print("Enter Name: ");
-//            String name = scanner.nextLine();
-//            System.out.print("Enter Email: ");
-//            String email = scanner.nextLine();
-//            System.out.print("Enter Phone: ");
-//            String phone = scanner.nextLine();
-//            System.out.print("Enter Address: ");
-//            String address = scanner.nextLine();
-//            int vetId = vetIdCounter++;
-//            System.out.println("Your assigned Veterinarian ID is: " + vetId);
-//
-//            Veterinarian veterinarian = new Veterinarian(vetId, name, username, password, email, phone, address);
-//            appController.signInVet(veterinarian);
-//            veterinarianMenu(vetId);
-//
-//        } else if (userType == 2) {
-//            System.out.print("Enter Pet Name: ");
-//            String petName = scanner.nextLine();
-//
-//            int petOwnerId = petOwnerIdCounter++;
-//            System.out.println("Your assigned Pet Owner ID is: " + petOwnerId);
-//
-//            Pet pet = new Pet(petOwnerId, petName, username, password);
-//            appController.signInPet(pet);
-//            petOwnerMenu(petOwnerId);
-//
-//        } else {
-//            System.out.println("Invalid user type.");
-//            return;
-//        }
-//
-//        System.out.println(" ");
-//    }
-//
-//    private void selectUserType() {
-//        boolean validSelection = false;
-//        while (!validSelection) {
-//            System.out.println("\nSelect your role:");
-//            System.out.println("1. Veterinarian");
-//            System.out.println("2. Pet Owner");
-//            System.out.print("Choose an option: ");
-//
-//            String roleChoice = scanner.nextLine();
-//            switch (roleChoice) {
-//                case "1":
-//                    int vetId = vetIdCounter++;
-//                    System.out.println("You selected: Veterinarian");
-//                    System.out.println("Your assigned Veterinarian ID is: " + vetId);
-//                    veterinarianMenu(vetId);
-//                    validSelection = true;
-//                    break;
-//                case "2":
-//                    int petOwnerId = petOwnerIdCounter++;
-//                    System.out.println("You selected: Pet Owner");
-//                    System.out.println("Your assigned Pet Owner ID is: " + petOwnerId);
-//                    petOwnerMenu(petOwnerId);
-//                    validSelection = true;
-//                    break;
-//                default:
-//                    System.out.println("Invalid selection. Please choose 1 or 2.");
-//                    break;
-//            }
-//        }
-//    }
-//
-//    private void veterinarianMenu(int vetId) {
-//        boolean running = true;
-//        while (running) {
-//            System.out.println("\n==== Veterinarian Menu ====");
-//            System.out.println("1. View Appointments");
-//            System.out.println("2. Add Disease to Pet");
-//            System.out.println("3. Notify and Cancel Appointments for Vacation");
-//            System.out.println("4. Delete Account");
-//            System.out.println("0. Logout");
-//            System.out.print("Your choice: ");
-//
-//            String choice = scanner.nextLine();
-//            switch (choice) {
-//                case "1":
-//                    viewAppointments(vetId);
-//                    break;
-//                case "2":
-//                    addDiseaseToPet();
-//                    break;
-//                case "3":
-//                    notifyAndCancelAppointments(vetId);
-//                    break;
-//                case "4":
-//                    deleteAccount(vetId, false);
-//                    running = false;
-//                    break;
-//                case "0":
-//                    System.out.println("Logging out...");
-//                    running = false;
-//                    break;
-//                default:
-//                    System.out.println("Invalid option. Please try again.");
-//                    break;
-//            }
-//        }
-//    }
-//
-//    private void petOwnerMenu(int petOwnerId) {
-//        boolean running = true;
-//        while (running) {
-//            System.out.println("\n==== Pet Owner Menu ====");
-//            System.out.println("1. Add Appointment");
-//            System.out.println("2. View Appointments");
-//            System.out.println("3. Cancel Appointment");
-//            System.out.println("4. View Health Record");
-//            System.out.println("5. Delete Account");
-//            System.out.println("0. Logout");
-//            System.out.print("Your choice: ");
-//
-//            String choice = scanner.nextLine();
-//            switch (choice) {
-//                case "1":
-//                    addAppointment(petOwnerId);
-//                    break;
-//                case "2":
-//                    viewAppointments(petOwnerId);
-//                    break;
-//                case "3":
-//                    cancelAppointment(petOwnerId);
-//                    break;
-//                case "4":
-//                    viewHealthRecord(petOwnerId);
-//                    break;
-//                case "5":
-//                    deleteAccount(petOwnerId, false);
-//                    break;
-//                case "0":
-//                    System.out.println("Logging out...");
-//                    running = false;
-//                    break;
-//                default:
-//                    System.out.println("Invalid option. Please try again.");
-//                    break;
-//            }
-//        }
-//    }
-//
-//    private void viewAppointments(int userId) {
-//        List<Appointment> appointments = appController.seeAppointments(userId);
-//        appointments.forEach(appointment -> System.out.println(appointment.toString()));
-//    }
-//
-//    private void addDiseaseToPet() {
-//        System.out.print("Enter Pet Id: ");
-//        Integer petId = scanner.nextInt();
-//        System.out.print("Enter Disease Id: ");
-//        Integer diseaseId = scanner.nextInt();
-//        appController.addDiseaseForPet(petId, diseaseId);
-//
-//    }
-//
-//    private void notifyAndCancelAppointments(int vetId) {
-//        System.out.print("Enter the start date (YYYY-MM-DD): ");
-//        String startDate = scanner.nextLine();
-//        System.out.print("Enter the end date (YYYY-MM-DD): ");
-//        String endDate = scanner.nextLine();
-//
-//        LocalDate start = LocalDate.parse(startDate);
-//        LocalDate end = LocalDate.parse(endDate);
-//
-//        appController.notifyAndCancelAppointmentsForVacation(vetId, start, end);
-//    }
-//
-//    private void deleteAccount(int id, boolean isPet) {
-//        appController.deleteAccount(id, isPet);
-//        System.out.println("Account deleted successfully.\n");
-//    }
-//
-//    private void addAppointment(int petOwnerId) {
-//        System.out.println("Enter appointment details:");
-//        System.out.print("Pet Name: ");
-//        String petName = scanner.nextLine();
-//        System.out.print("Owner Name: ");
-//        String ownerName = scanner.nextLine();
-//        System.out.print("Date (YYYY-MM-DD): ");
-//        String date = scanner.nextLine();
-//
-//
-//    }
-//
-//    private void cancelAppointment(int petOwnerId) {
-//        System.out.print("Enter appointment ID to cancel: ");
-//        int appointmentId = scanner.nextInt();
-//        scanner.nextLine();
-//        appController.cancelAppointment(appointmentId);
-//        System.out.println("Appointment canceled successfully.\n");
-//    }
-//
-//    private void viewHealthRecord(int petOwnerId) {
-//        System.out.println("Displaying health record for Pet Owner ID: " + petOwnerId + ".\n");
-//    }
-//}
+package UI;
+import Model.*;
+import Service.Service;
+import Controller.Controller;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import Utils.*;
+public class UI {
+
+    private final Controller Controller;
+    private final Scanner scanner;
+    private Integer currentPetId = null;
+    private Integer currentVetId = null;
+
+    public UI(Controller Controller, Scanner scanner) {
+        this.Controller = Controller;
+        this.scanner = scanner;
+    }
+
+    public void run() {
+        boolean running = true;
+        while (running) {
+            System.out.println("\n====Main Menu====\n");
+            System.out.println("1. Log In");
+            System.out.println("2. Sign In");
+            System.out.println("3. Service");
+            System.out.println("0. Exit");
+            System.out.print("Choose an option: ");
+            String choice = scanner.nextLine().trim();
+            switch (choice) {
+                case "1":
+                    LogInMenu();
+                    break;
+                case "2":
+                    SignInMenu();
+                    break;
+                case "3":
+                    ServiceMenu();
+                    break;
+                case "0":
+                    System.out.println("Exiting... Goodbye!");
+                    running = false;
+                    break;
+            }
+        }
+    }
+
+    private void LogInMenu() {
+        System.out.println("Login Menu:");
+        System.out.print("Enter Username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter Password: ");
+        String password = scanner.nextLine();
+
+        try {
+            Object loggedInUser = Controller.login(username, password);
+            if (loggedInUser instanceof Pet) {
+                Pet pet = (Pet) loggedInUser;
+                System.out.println("Login successful! You are logged in as a Pet.");
+                currentPetId = pet.getId();
+                System.out.println("petid is: "+pet.getId());
+                showPetMenu(pet);
+            } else if (loggedInUser instanceof Veterinarian) {
+                Veterinarian vet = (Veterinarian) loggedInUser;
+                System.out.println("Login successful! You are logged in as a Veterinarian.");
+                currentVetId = vet.getId();
+                System.out.println("vet id is: "+vet.getId());
+                showVetMenu(vet);
+            } else {
+                System.out.println("Invalid credentials.");
+            }
+        } catch (Exception e) {
+            System.out.println("Login failed: " + e.getMessage());
+        }
+    }
+
+
+    private void SignInMenu() {
+        System.out.println("Sign In Menu:");
+
+        System.out.println("Are you signing up as a Pet or Veterinarian?");
+        System.out.println("Enter 'Pet' or 'Vet'");
+        String userType = scanner.nextLine().trim().toLowerCase();
+
+        if (userType.equals("pet")) {
+            System.out.println("Enter pet name: ");
+            String name = scanner.nextLine();
+            System.out.println("Enter Username: ");
+            String username = scanner.nextLine();
+            System.out.println("Enter Password: ");
+            String password = scanner.nextLine();
+            System.out.println("Enter pet Type (DOG, CAT, BIRD, REPTILE): ");
+            String petType = scanner.nextLine().toUpperCase();
+
+            try {
+                AnimalType animalType = AnimalType.valueOf(petType);
+                Pet pet = new Pet(name, username, password, animalType);
+                Controller.createPet(pet);
+                currentPetId = pet.getId();
+                System.out.println("petid is: "+pet.getId());
+                System.out.println("Pet registered successfully!");
+                showPetMenu(pet);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid animal type.");
+            }
+        } else if (userType.equals("vet")) {
+            System.out.println("Enter Veterinarian name: ");
+            String vetName = scanner.nextLine();
+            System.out.println("Enter Username: ");
+            String vetUsername = scanner.nextLine();
+            System.out.println("Enter Password: ");
+            String vetPassword = scanner.nextLine();
+            System.out.println("Enter Veterinarian Specialization (DERMATOLOGY, SURGERY, DENTISTRY, INTERNAL, ONCOLOGY, GENERAL): ");
+            String specializationInput = scanner.nextLine().toUpperCase();
+
+            try {
+                Specialization specialization = Specialization.valueOf(specializationInput);
+                Veterinarian vet = new Veterinarian(vetName, vetUsername, vetPassword, specialization);
+                Controller.createVet(vet);
+                System.out.println("Veterinarian registered successfully!");
+                currentVetId=vet.getId();
+                System.out.println("vet id is: "+vet.getId());
+                showVetMenu(vet);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid specialization type.");
+            }
+        } else {
+            System.out.println("Invalid option. Please enter 'Pet' or 'Vet'.");
+        }
+    }
+
+    private void ServiceMenu() {
+        boolean running = true;
+        while (running) {
+            System.out.println("===Service Menu===");
+            System.out.println("1. Add New Test");
+            System.out.println("2. Add New Vaccine");
+            System.out.println("3. Add New Disease");
+            System.out.println("4. See all Tests");
+            System.out.println("5. See all Vaccines");
+            System.out.println("6. See all Diseases");
+            System.out.println("7. See all Appointments");
+            System.out.println("8. Get Appointments By Date");
+            System.out.println("0. Exit");
+            String choice = scanner.nextLine().trim();
+            switch (choice) {
+                case "1":
+                    System.out.println("Enter Test name: ");
+                    String tname = scanner.nextLine();
+                    System.out.println("Enter Test Type ( BLOOD,\n" +
+                            "    X_RAY,\n" +
+                            "    ULTRASOUND,\n" +
+                            "    ALLERGY)");
+                    String tinput = scanner.nextLine().toUpperCase();
+
+                    try {
+                        TestType testType = TestType.valueOf(tinput);
+                        Test test = new Test(tname, testType);
+                        Controller.createTest(test);
+                        System.out.println("Test added successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("The specified type is invalid.");
+                    }
+                    break;
+                case "2":
+                    System.out.println("Enter Vaccine name: ");
+                    String vaccname = scanner.nextLine();
+                    System.out.println("Enter Vaccine Type ( RABIES,\n" +
+                            "    DISTEMPER,\n" +
+                            "    FELINE_LEUKEMIA,\n" +
+                            "    PARROT_FEVER)");
+                    String vaccinput = scanner.nextLine().toUpperCase();
+
+                    try {
+                        VaccineType vaccineType = VaccineType.valueOf(vaccinput);
+                        Vaccine vaccine = new Vaccine(vaccname, vaccineType);
+                        Controller.createVaccine(vaccine);
+                        System.out.println("Vaccine added successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("The specified type is invalid.");
+                    }
+                    break;
+                case "3":
+                    System.out.println("Enter Disease name: ");
+                    String disname = scanner.nextLine();
+                    System.out.println("Enter Disease Type ( \nCANINE_PARAVOVIRUS,\n" +
+                            "    RABIES,\n" +
+                            "    FELINE_LEUKEMIA,\n" +
+                            "    PSITTACOSIS,\n" +
+                            "    CANINE_DISTEMPER,\n" +
+                            "    HEARTWORM,\n" +
+                            "    LYME_DISEASE,\n" +
+                            "    KENNEL_COUGH,\n" +
+                            "    LEPTOSPIROSIS,\n" +
+                            "    CANINE_HEPATITIS,\n" +
+                            "    TICK_FEVER,\n" +
+                            "    BABESIOSIS,\n" +
+                            "    ANTHRAX,\n" +
+                            "    BRUCELLOSIS,\n" +
+                            "    RINGWORM): ");
+                    String disinput = scanner.nextLine().toUpperCase();
+
+                    try {
+                        DiseaseType diseaseType = DiseaseType.valueOf(disinput);
+                        Disease disease = new Disease(disname, diseaseType);
+                        Controller.createDisease(disease);
+                        System.out.println("Disease added successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("The specified type is invalid.");
+                    }
+                    break;
+                case "4":
+                    List<Test> tests = Controller.getAllTests();
+                    if (tests.isEmpty()) {
+                        System.out.println("No tests found.");
+                    } else {
+                        System.out.println("\nList of all tests:");
+                        for (Test test : tests) {
+                            System.out.println(test);
+                        }
+                    }
+                    break;
+                case "5":
+                    List<Vaccine> vaccines = Controller.getAllVaccines();
+                    if (vaccines.isEmpty()) {
+                        System.out.println("No vaccine found.");
+                    } else {
+                        System.out.println("\nList of all vaccines:");
+                        for (Vaccine v : vaccines) {
+                            System.out.println(v);
+                        }
+                    }
+                    break;
+                case "6":
+                    List<Disease> diseases = Controller.getAllDiseases();
+                    if (diseases.isEmpty()) {
+                        System.out.println("No diseases found.");
+                    } else {
+                        System.out.println("\nList of all Diseases:");
+                        for (Disease dis : diseases) {
+                            System.out.println(dis);
+                        }
+                    }
+                    break;
+                case "7":
+                    List<Appointment> appoint = Controller.getAllAppointments();
+                    if (appoint.isEmpty()) {
+                        System.out.println("No appointments found.");
+                    } else {
+                        System.out.println("\nList of all appointments:");
+                        for (Appointment app : appoint) {
+                            System.out.println(app);
+                        }
+                    }
+                    break;
+                case "8":
+                    System.out.println("Enter the date (dd-MM-yyyy):");
+                    String date1 = scanner.nextLine();
+                    List<Appointment> appointmentsByDate = Controller.getAppointmentsByDate(date1);
+                    if (appointmentsByDate.isEmpty()) {
+                        System.out.println("No appointments found for the given date.");
+                    } else {
+                        System.out.println("\nAppointments on " + date1 + ":");
+                        for (Appointment app : appointmentsByDate) {
+                            System.out.println(app);
+                        }
+                    }
+                    break;
+                case "0":
+                    System.out.println("Exiting... Goodbye!");
+                    running = false;
+                    break;
+            }
+        }
+    }
+
+
+    private void showPetMenu(Pet pet) {
+        boolean runningPetMenu = true;
+        while (runningPetMenu) {
+            System.out.println("\n===Pet Menu===");
+            System.out.println("1. Book Appointment");
+            System.out.println("2. See Appointments");
+            System.out.println("3. See Notifications");
+            System.out.println("4. See Health Record");
+            System.out.println("5. Check Reminders");
+            System.out.println("0. Log Out");
+            System.out.print("Choose an option: ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    System.out.println("Available Vaccines:");
+                    List<Vaccine> vacc = Controller.getAllVaccines();
+                    for (Vaccine vaccine : vacc) {
+                        System.out.println(vaccine.getId() + ": " + vaccine.getName());
+                    }
+                    System.out.println("Enter vaccine IDs separated by commas (or press Enter to skip):");
+                    String vaccineInput = scanner.nextLine();
+                    ArrayList<Vaccine> selectedVaccines = new ArrayList<>();
+                    if (!vaccineInput.isBlank()) {
+                        for (String id : vaccineInput.split(",")) {
+                            Vaccine vaccine = vacc.stream()
+                                    .filter(v -> v.getId() == Integer.parseInt(id.trim()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (vaccine != null) {
+                                selectedVaccines.add(vaccine);
+                            }
+                        }
+                    }
+
+                    System.out.println("Available Tests:");
+                    List<Test> tst = Controller.getAllTests();
+                    for (Test test : tst) {
+                        System.out.println(test.getId() + ": " + test.getName());
+                    }
+                    System.out.println("Enter test IDs separated by commas (or press Enter to skip):");
+                    String testInput = scanner.nextLine();
+                    ArrayList<Test> selectedTests = new ArrayList<>();
+                    if (!testInput.isBlank()) {
+                        for (String id : testInput.split(",")) {
+                            Test test = tst.stream()
+                                    .filter(t -> t.getId() == Integer.parseInt(id.trim()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (test != null) {
+                                selectedTests.add(test);
+                            }
+                        }
+                    }
+
+                    List<Veterinarian> vets = Controller.getAllVeterinarians();
+                    if (vets.isEmpty()) {
+                        System.out.println("No vets found.");
+                    } else {
+                        System.out.println("\nList of all Vets:");
+                        for (Veterinarian vet : vets) {
+                            System.out.println(vet);
+                        }
+                    }
+                    System.out.println("Enter Veterinarian ID:");
+                    int vetId = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Enter Appointment Date (dd-MM-yyyy):");
+                    String date = scanner.nextLine();
+                    System.out.println("Enter Appointment Time (HH:mm):");
+                    String time = scanner.nextLine();
+                    System.out.println("Enter Appointment Type (ROUTINE,BEHAVIOR,DENTAL,EMERGENCY,SURGICAL):");
+                    String type = scanner.nextLine().toUpperCase();
+                    try {
+                        AppointmentType appType= AppointmentType.valueOf(type);
+                        Appointment appointment = new Appointment( currentPetId, vetId, date, time, appType, selectedTests, selectedVaccines);
+                        Controller.createAppointment(appointment);
+                        System.out.println("Appointment added successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("The specified type is invalid.");
+                    }
+                    break;
+                case "2":
+                    List<Appointment> appointmentsByPet = Controller.getAppointmentsByPet(currentPetId);
+                    if (appointmentsByPet.isEmpty()) {
+                        System.out.println("No appointments found for the given pet.");
+                    } else {
+                        System.out.println("\nAppointments for Pet ID " + currentPetId + ":");
+                        for (Appointment app : appointmentsByPet) {
+                            System.out.println(app);
+                        }
+                    }
+                    break;
+                case "3":
+                    List<Notification> notifications = Controller.getNotificationsByUserId(currentPetId);
+
+                    if (notifications.isEmpty()) {
+                        System.out.println("You have no notifications.");
+                    } else {
+                        System.out.println("Your Notifications:");
+                        for (Notification notification : notifications) {
+                            System.out.println(
+                                    "Title: " + notification.getTitle() +
+                                            " Date: " + notification.getDate());
+                        }
+                    }
+                    break;
+                case "4":
+                    HealthRecord hrpet = Controller.getHealthRecordByPetId(currentPetId);
+                    if (hrpet == null) {
+                        System.out.println("No health record found for the given Pet ID.");
+                    } else {
+                        System.out.println("\nHealth Record for Pet " + currentPetId + ":");
+                        System.out.println(hrpet);
+                    }
+                    break;
+                case "5":
+                    scanner.nextLine();
+                    Controller.showUpcomingAppointments(currentPetId);
+                    break;
+                case "0":
+                    System.out.println("Logging Out...");
+                    runningPetMenu=false;
+                    break;
+            }
+        }
+    }
+
+    private void showVetMenu(Veterinarian vet) {
+        boolean runningVetMenu = true;
+        while (runningVetMenu) {
+            System.out.println("\n===Vet Menu===");
+            System.out.println("1. See all Appointments");
+            System.out.println("2. Add Appointment for Pet");
+            System.out.println("3. See Health Record for Pet");
+            System.out.println("4. Add disease for Pet");
+            System.out.println("5. Compose a notification for Pet");
+            System.out.println("6. Cancel Appointments for Vacation and Notify Pets");
+            System.out.println("0. Log Out");
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1":
+                    List<Appointment> appointmentsByVet = Controller.getAppointmentsByVet(currentVetId);
+                    if (appointmentsByVet.isEmpty()) {
+                        System.out.println("No appointments found for the given veterinarian.");
+                    } else {
+                        System.out.println("\nAppointments for Veterinarian ID " + currentVetId + ":");
+                        for (Appointment app : appointmentsByVet) {
+                            System.out.println(app);
+                        }
+                    }
+                    break;
+                case "2":
+                    System.out.println("Available Vaccines:");
+                    List<Vaccine> vacc = Controller.getAllVaccines();
+                    for (Vaccine vaccine : vacc) {
+                        System.out.println(vaccine.getId() + ": " + vaccine.getName());
+                    }
+                    System.out.println("Enter vaccine IDs separated by commas (or press Enter to skip):");
+                    String vaccineInput = scanner.nextLine();
+                    ArrayList<Vaccine> selectedVaccines = new ArrayList<>();
+                    if (!vaccineInput.isBlank()) {
+                        for (String id : vaccineInput.split(",")) {
+                            Vaccine vaccine = vacc.stream()
+                                    .filter(v -> v.getId() == Integer.parseInt(id.trim()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (vaccine != null) {
+                                selectedVaccines.add(vaccine);
+                            }
+                        }
+                    }
+
+                    System.out.println("Available Tests:");
+                    List<Test> tst = Controller.getAllTests();
+                    for (Test test : tst) {
+                        System.out.println(test.getId() + ": " + test.getName());
+                    }
+                    System.out.println("Enter test IDs separated by commas (or press Enter to skip):");
+                    String testInput = scanner.nextLine();
+                    ArrayList<Test> selectedTests = new ArrayList<>();
+                    if (!testInput.isBlank()) {
+                        for (String id : testInput.split(",")) {
+                            Test test = tst.stream()
+                                    .filter(t -> t.getId() == Integer.parseInt(id.trim()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (test != null) {
+                                selectedTests.add(test);
+                            }
+                        }
+                    }
+                    List<Pet> pets = Controller.getAllPets();
+                    if (pets.isEmpty()) {
+                        System.out.println("No pets found.");
+                    } else {
+                        System.out.println("\nList of all pets:");
+                        for (Pet pet : pets) {
+                            System.out.println(pet);
+                        }
+                    }
+                    System.out.println("Enter Pet ID:");
+                    int petId = scanner.nextInt();
+                    System.out.println("Enter Appointment Date (dd-MM-yyyy):");
+                    String date = scanner.nextLine();
+                    System.out.println("Enter Appointment Time (HH:mm):");
+                    String time = scanner.nextLine();
+                    System.out.println("Enter Appointment Type (ROUTINE,BEHAVIOR,DENTAL,EMERGENCY,SURGICAL):");
+                    String type = scanner.nextLine().toUpperCase();
+                    try {
+                        AppointmentType appType= AppointmentType.valueOf(type);
+                        Appointment appointment = new Appointment( petId, currentVetId, date, time, appType, selectedTests, selectedVaccines);
+                        Controller.createAppointment(appointment);
+                        System.out.println("Appointment added successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("The specified type is invalid.");
+                    }
+                    break;
+                case "3":
+                    List<Pet> pets1 = Controller.getAllPets();
+                    if (pets1.isEmpty()) {
+                        System.out.println("No pets found.");
+                    } else {
+                        System.out.println("\nList of all pets:");
+                        for (Pet pet : pets1) {
+                            System.out.println(pet);
+                        }
+                    }
+                    System.out.println("Enter Pet ID:");
+                    int pid = scanner.nextInt();
+                    scanner.nextLine();
+                    HealthRecord hrpet = Controller.getHealthRecordByPetId(pid);
+                    if (hrpet == null) {
+                        System.out.println("No health record found for the given Pet ID.");
+                    } else {
+                        System.out.println("\nHealth Record for Pet " + pid + ":");
+                        System.out.println(hrpet);
+                    }
+                    break;
+                case "4":
+                    List<Pet> pets2 = Controller.getAllPets();
+                    if (pets2.isEmpty()) {
+                        System.out.println("No pets found.");
+                    } else {
+                        System.out.println("\nList of all pets:");
+                        for (Pet pet : pets2) {
+                            System.out.println(pet);
+                        }
+                    }
+                    System.out.println("Enter Pet ID:");
+                    int petid1 = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Diseases: ");
+                    List<Disease> diseases1 = Controller.getAllDiseases();
+                    for (Disease disease : diseases1) {
+                        System.out.println(disease.getId() + ": " + disease.getName());
+                    }
+                    System.out.println("Enter disease ID: ");
+                    String diseaseInput = scanner.nextLine().trim();
+
+                    if (!diseaseInput.isBlank()) {
+                        try {
+                            int diseaseId = Integer.parseInt(diseaseInput);
+
+                            Disease selectedDisease = diseases1.stream()
+                                    .filter(d -> d.getId() == diseaseId)
+                                    .findFirst()
+                                    .orElse(null);
+
+                            if (selectedDisease != null) {
+                                System.out.println("Disease selected: " + selectedDisease.getName());
+                                Controller.addDiseaseToPet(petid1, selectedDisease);
+                            } else {
+                                System.out.println("Disease with ID " + diseaseId + " not found.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid ID input. Please enter a valid integer.");
+                        }
+                    } else {
+                        System.out.println("No disease ID entered.");
+                    }
+
+                    break;
+                case "5":
+                    System.out.println("Enter Pet Id:");
+                    int userId = Integer.parseInt(scanner.nextLine().trim());
+
+                    System.out.println("Enter Notification Title:");
+                    String title = scanner.nextLine().trim();
+
+                    System.out.println("Enter Notification Date (dd-MM-yyyy):");
+                    String date2 = scanner.nextLine().trim();
+
+                    System.out.println("Enter Notification Type (CANCELLATION, REMINDER, CONFIRMATION, VACATION):");
+                    String ntypeInput = scanner.nextLine().trim().toUpperCase();
+
+                    try {
+                        NotificationType type1 = NotificationType.valueOf(ntypeInput);
+                        Notification notif=new Notification(userId, title, date2, type1);
+                        Controller.sendNotification(notif);
+                        System.out.println("Notification sent to Pet Id " + userId);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Invalid Notification Type.");
+                    }
+                    break;
+                case "6":
+                    System.out.print("Enter start date (dd-MM-yyyy): ");
+                    String startDateStr = scanner.nextLine();
+
+                    System.out.print("Enter end date (dd-MM-yyyy): ");
+                    String endDateStr = scanner.nextLine();
+                    try {
+                        Controller.cancelAppointmentsForVetInPeriod(currentVetId, startDateStr, endDateStr);
+                        System.out.println("Appointments canceled successfully, notifications sent to the pets.");
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    break;
+                case "0":
+                    System.out.println("Logging Out...");
+                    runningVetMenu=false;
+                    break;
+            }
+        }
+    }
+
+}
