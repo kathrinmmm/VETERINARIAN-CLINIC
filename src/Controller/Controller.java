@@ -99,6 +99,10 @@ public class Controller {
     public Object login(String username, String password) throws Exception {
         return service.login(username, password);
     }
-    public void logout(){service.logout();}
 
+    public void deletePet(Integer id){service.deletePet(id);}
+
+    public void deleteVet(Integer id){service.deleteVet(id);}
+
+    public void deleteApp(Integer id){service.deleteApp(id);}
 }

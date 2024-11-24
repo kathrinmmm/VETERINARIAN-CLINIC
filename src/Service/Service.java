@@ -147,6 +147,17 @@ public class Service {
         hr1.addAppointment(app1);
         hr2.addAppointment(app2);
     }
+    public void deletePet(Integer id){
+        petRepository.delete(id);
+    }
+
+    public void deleteVet(Integer id){
+        vetRepository.delete(id);
+    }
+
+    public void deleteApp(Integer id){
+        appointmentRepository.delete(id);
+    }
 
     public void addPet(Pet pet) {
         pet.setId(IdGenerator.generatePetId());

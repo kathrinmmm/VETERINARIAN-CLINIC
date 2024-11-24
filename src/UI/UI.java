@@ -288,6 +288,8 @@ public class UI {
             System.out.println("3. See Notifications");
             System.out.println("4. See Health Record");
             System.out.println("5. Check Reminders");
+            System.out.println("6. Delete Account");
+            System.out.println("7. Cancel Appointment");
             System.out.println("0. Log Out");
             System.out.print("Choose an option: ");
 
@@ -357,7 +359,7 @@ public class UI {
                         AppointmentType appType= AppointmentType.valueOf(type);
                         Appointment appointment = new Appointment( currentPetId, vetId, date, time, appType, selectedTests, selectedVaccines);
                         Controller.createAppointment(appointment);
-                        System.out.println("Appointment added successfully!");
+                        Controller.sendConfirmationNotification(currentPetId);
                     } catch (IllegalArgumentException e) {
                         System.out.println("The specified type is invalid.");
                     }
@@ -397,8 +399,28 @@ public class UI {
                     }
                     break;
                 case "5":
-                    scanner.nextLine();
                     Controller.showUpcomingAppointments(currentPetId);
+                    break;
+                case "6":
+                    Controller.deletePet(currentPetId);
+                    System.out.println("Deleting Account...");
+                    runningPetMenu=false;
+                    break;
+                case "7":
+                    List<Appointment> appointmentsByPet1 = Controller.getAppointmentsByPet(currentPetId);
+                    if (appointmentsByPet1.isEmpty()) {
+                        System.out.println("No appointments found for the given pet.");
+                    } else {
+                        System.out.println("\nAppointments for Pet ID " + currentPetId + ":");
+                        for (Appointment app : appointmentsByPet1) {
+                            System.out.println(app);
+                        }
+                        System.out.println("Enter Appointment ID:");
+                        int appointmentId = scanner.nextInt();
+                        scanner.nextLine();
+                        Controller.deleteApp(appointmentId);
+                        Controller.sendCancellationNotification(currentPetId);
+                    }
                     break;
                 case "0":
                     System.out.println("Logging Out...");
@@ -418,6 +440,9 @@ public class UI {
             System.out.println("4. Add disease for Pet");
             System.out.println("5. Compose a notification for Pet");
             System.out.println("6. Cancel Appointments for Vacation and Notify Pets");
+            System.out.println("7. Cancel Appointment");
+            System.out.println("8. See Notifications");
+            System.out.println("9. Delete Account");
             System.out.println("0. Log Out");
             String choice = scanner.nextLine();
             switch (choice) {
@@ -570,10 +595,11 @@ public class UI {
                     System.out.println("Enter Notification Title:");
                     String title = scanner.nextLine().trim();
 
-                    System.out.println("Enter Notification Date (dd-MM-yyyy):");
-                    String date2 = scanner.nextLine().trim();
+                    LocalDate today = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    String date2 = today.format(formatter);
 
-                    System.out.println("Enter Notification Type (CANCELLATION, REMINDER, CONFIRMATION, VACATION):");
+                    System.out.println("Enter Notification Type (CANCELLATION, REMINDER, CONFIRMATION, VACATION, OTHER):");
                     String ntypeInput = scanner.nextLine().trim().toUpperCase();
 
                     try {
@@ -598,6 +624,41 @@ public class UI {
                         System.out.println("Error: " + e.getMessage());
                     }
                     break;
+                case "7":
+                    List<Appointment> appointmentsByVet1 = Controller.getAppointmentsByVet(currentVetId);
+                    if (appointmentsByVet1.isEmpty()) {
+                        System.out.println("No appointments found for the given veterinarian.");
+                    } else {
+                        System.out.println("\nAppointments for Veterinarian ID " + currentVetId + ":");
+                        for (Appointment app : appointmentsByVet1) {
+                            System.out.println(app);
+                        }
+                        System.out.println("Enter Appointment ID:");
+                        int appointmentId = scanner.nextInt();
+                        scanner.nextLine();
+                        Controller.deleteApp(appointmentId);
+                        Controller.sendCancellationNotification(currentVetId);
+                    }
+                    break;
+                case "8":
+                    List<Notification> notifications = Controller.getNotificationsByUserId(currentVetId);
+
+                    if (notifications.isEmpty()) {
+                        System.out.println("You have no notifications.");
+                    } else {
+                        System.out.println("Your Notifications:");
+                        for (Notification notification : notifications) {
+                            System.out.println(
+                                    "Title: " + notification.getTitle() +
+                                            " Date: " + notification.getDate());
+                        }
+                    }
+                    break;
+                case "9":
+                    Controller.deleteVet(currentVetId);
+                    System.out.println("Deleting Account...");
+                    runningVetMenu=false;
+                    break;
                 case "0":
                     System.out.println("Logging Out...");
                     runningVetMenu=false;
@@ -607,3 +668,4 @@ public class UI {
     }
 
 }
+
