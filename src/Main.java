@@ -26,7 +26,8 @@ public class Main {
                 diseaseRepository,
                 vaccineRepository,
                 testRepository,
-                notificationRepository
+                notificationRepository,
+                userRepository
         );
 
 
