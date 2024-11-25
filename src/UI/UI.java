@@ -96,7 +96,7 @@ public class UI {
 
     /**
      * Provides the sign-in menu where users can sign up as either a Pet or Veterinarian.
-     * This menu collects necessary information such as name, username, password, and type (for both Pets and Veterinarians).
+     * This menu collects necessary information such as name, username, password, and type (for both Pets.txt and Veterinarians).
      * After successful registration, the user is logged in and their respective menu is shown.
      */
 
@@ -169,7 +169,10 @@ public class UI {
             System.out.println("5. See all Vaccines");
             System.out.println("6. See all Diseases");
             System.out.println("7. See all Appointments");
-            System.out.println("8. Get Appointments By Date");
+            System.out.println("8. Get Appointments from a specific Date");
+            System.out.println("9. See all Vets.txt by Specialization");
+            System.out.println("10. Sort appointments by date");
+            System.out.println("11. See appointments in date range");
             System.out.println("0. Exit");
             String choice = scanner.nextLine().trim();
             switch (choice) {
@@ -265,7 +268,7 @@ public class UI {
                     if (diseases.isEmpty()) {
                         System.out.println("No diseases found.");
                     } else {
-                        System.out.println("\nList of all Diseases:");
+                        System.out.println("\nList of all Diseases.txt:");
                         for (Disease dis : diseases) {
                             System.out.println(dis);
                         }
@@ -295,6 +298,35 @@ public class UI {
                         }
                     }
                     break;
+                case"9":
+                    List<Veterinarian> sortedVets = Controller.sortVeterinariansBySpecialization();
+                    sortedVets.forEach(vet -> System.out.println("-Id:" + vet.getId()+" Name: " + vet.getName() + ", Specialization: " + vet.getSpecialization()));
+                    break;
+                case "10":
+                    List<Appointment> sortedAppointments = Controller.sortAppointmentsByDate();
+                    sortedAppointments.forEach(app -> System.out.println(
+                            "- ID: " + app.getAppId() + ", Data: " + app.getDate() + ", Pet ID: " + app.getPetId()));
+                    break;
+                case "11":
+                    System.out.println("Enter start date (format: dd-MM-yyyy):");
+                    String startDate = scanner.next();
+                    System.out.println("Enter end date (format: dd-MM-yyyy):");
+                    String endDate = scanner.next();
+
+                    try {
+                        List<Appointment> appointmentsInRange = Controller.getAppointmentsInDateRange(startDate, endDate);
+
+                        if (appointmentsInRange.isEmpty()) {
+                            System.out.println("No appointments in the specified interval.");
+                        } else {
+                            System.out.println("Appointments in date range: " + startDate + " - " + endDate + ":");
+                            appointmentsInRange.forEach(app -> System.out.println(
+                                    "- ID: " + app.getAppId() + ", Date: " + app.getDate() + ", Pet ID: " + app.getPetId()));
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Eroare: " + e.getMessage());
+                    }
+                    break;
                 case "0":
                     System.out.println("Exiting... Goodbye!");
                     running = false;
@@ -314,7 +346,7 @@ public class UI {
             System.out.println("\n===Pet Menu===");
             System.out.println("1. Book Appointment");
             System.out.println("2. See Appointments");
-            System.out.println("3. See Notifications");
+            System.out.println("3. See Notifications.txt");
             System.out.println("4. See Health Record");
             System.out.println("5. Check Reminders");
             System.out.println("6. Delete Account");
@@ -326,7 +358,7 @@ public class UI {
 
             switch (choice) {
                 case "1":
-                    System.out.println("Available Vaccines:");
+                    System.out.println("Available Vaccines.txt:");
                     List<Vaccine> vacc = Controller.getAllVaccines();
                     for (Vaccine vaccine : vacc) {
                         System.out.println(vaccine.getId() + ": " + vaccine.getName());
@@ -346,7 +378,7 @@ public class UI {
                         }
                     }
 
-                    System.out.println("Available Tests:");
+                    System.out.println("Available Tests.txt:");
                     List<Test> tst = Controller.getAllTests();
                     for (Test test : tst) {
                         System.out.println(test.getId() + ": " + test.getName());
@@ -370,7 +402,7 @@ public class UI {
                     if (vets.isEmpty()) {
                         System.out.println("No vets found.");
                     } else {
-                        System.out.println("\nList of all Vets:");
+                        System.out.println("\nList of all Vets.txt:");
                         for (Veterinarian vet : vets) {
                             System.out.println(vet);
                         }
@@ -410,7 +442,7 @@ public class UI {
                     if (notifications.isEmpty()) {
                         System.out.println("You have no notifications.");
                     } else {
-                        System.out.println("Your Notifications:");
+                        System.out.println("Your Notifications.txt:");
                         for (Notification notification : notifications) {
                             System.out.println(
                                     "Title: " + notification.getTitle() +
@@ -472,9 +504,9 @@ public class UI {
             System.out.println("3. See Health Record for Pet");
             System.out.println("4. Add disease for Pet");
             System.out.println("5. Compose a notification for Pet");
-            System.out.println("6. Cancel Appointments for Vacation and Notify Pets");
+            System.out.println("6. Cancel Appointments for Vacation and Notify Pets.txt");
             System.out.println("7. Cancel Appointment");
-            System.out.println("8. See Notifications");
+            System.out.println("8. See Notifications.txt");
             System.out.println("9. Delete Account");
             System.out.println("0. Log Out");
             String choice = scanner.nextLine();
@@ -491,7 +523,7 @@ public class UI {
                     }
                     break;
                 case "2":
-                    System.out.println("Available Vaccines:");
+                    System.out.println("Available Vaccines.txt:");
                     List<Vaccine> vacc = Controller.getAllVaccines();
                     for (Vaccine vaccine : vacc) {
                         System.out.println(vaccine.getId() + ": " + vaccine.getName());
@@ -511,7 +543,7 @@ public class UI {
                         }
                     }
 
-                    System.out.println("Available Tests:");
+                    System.out.println("Available Tests.txt:");
                     List<Test> tst = Controller.getAllTests();
                     for (Test test : tst) {
                         System.out.println(test.getId() + ": " + test.getName());
@@ -590,7 +622,7 @@ public class UI {
                     System.out.println("Enter Pet ID:");
                     int petid1 = scanner.nextInt();
                     scanner.nextLine();
-                    System.out.println("Diseases: ");
+                    System.out.println("Diseases.txt: ");
                     List<Disease> diseases1 = Controller.getAllDiseases();
                     for (Disease disease : diseases1) {
                         System.out.println(disease.getId() + ": " + disease.getName());
@@ -679,7 +711,7 @@ public class UI {
                     if (notifications.isEmpty()) {
                         System.out.println("You have no notifications.");
                     } else {
-                        System.out.println("Your Notifications:");
+                        System.out.println("Your Notifications.txt:");
                         for (Notification notification : notifications) {
                             System.out.println(
                                     "Title: " + notification.getTitle() +

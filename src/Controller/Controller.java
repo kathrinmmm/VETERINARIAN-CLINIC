@@ -276,14 +276,6 @@ public class Controller {
         return service.getNotificationsByType(type);
     }
 
-    /**
-     * Retrieves the ID of the logged-in user.
-     *
-     * @return the ID of the currently logged-in user
-     */
-    public Integer getLoggedInUserId() {
-        return service.getLoggedInUserId();
-    }
 
     /**
      * Logs in a user with the provided username and password.
@@ -323,4 +315,10 @@ public class Controller {
     public void deleteApp(Integer id) {
         service.deleteApp(id);
     }
+
+    public List<Veterinarian> sortVeterinariansBySpecialization(){return service.sortVeterinariansBySpecialization();}
+
+    public List<Appointment> sortAppointmentsByDate(){return service.sortAppointmentsByDate();}
+
+    public List<Appointment> getAppointmentsInDateRange(String startDateStr, String endDateStr) throws Exception{return service.getAppointmentsInDateRange(startDateStr,endDateStr);}
 }

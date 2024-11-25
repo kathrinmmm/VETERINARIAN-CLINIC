@@ -6,6 +6,7 @@ import Repository.IRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 import java.time.LocalDate;
 import java.util.List;
@@ -157,7 +158,7 @@ public class Service {
         testRepository.create(test12);
 
 
-        Appointment app1 = new Appointment(1, 1, 3, "25-11-2024","18:30", AppointmentType.ROUTINE,List.of(test1), List.of(vac1));
+        Appointment app1 = new Appointment(1, 1, 3, "28-12-2024","18:30", AppointmentType.ROUTINE,List.of(test1), List.of(vac1));
         Appointment app2=new Appointment(2,2,2,"25-11-2024","12:00",AppointmentType.ROUTINE,List.of(), List.of());
         appointmentRepository.create(app1);
         appointmentRepository.create(app2);
@@ -533,18 +534,51 @@ public class Service {
     }
 
     /**
-     * Retrieves the logged-in user's ID.
+     * Sorts veterinarians by their specialization in alphabetical order.
      *
-     * @return The ID of the logged-in user.
+     * @return A list of veterinarians sorted by specialization.
      */
-    public Integer getLoggedInUserId() {
-        return loggedInUserId;
+    public List<Veterinarian> sortVeterinariansBySpecialization() {
+        return vetRepository.getAll().stream()
+                .sorted(Comparator.comparing(Veterinarian::getSpecialization))
+                .collect(Collectors.toList());
     }
 
-    public void logout() {
-        loggedInUserId = null;
+    /**
+     * Sorts appointments by date in chronological order.
+     *
+     * @return A list of appointments sorted by date.
+     */
+    public List<Appointment> sortAppointmentsByDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return appointmentRepository.getAll().stream()
+                .sorted((a1, a2) -> {
+                    LocalDate date1 = LocalDate.parse(a1.getDate(), formatter);
+                    LocalDate date2 = LocalDate.parse(a2.getDate(), formatter);
+                    return date1.compareTo(date2);
+                })
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves appointments within a specified date range.
+     *
+     * @param startDateStr The start date in "dd-MM-yyyy" format.
+     * @param endDateStr The end date in "dd-MM-yyyy" format.
+     * @return A list of appointments within the specified date range.
+     * @throws Exception if the date format is invalid.
+     */
+    public List<Appointment> getAppointmentsInDateRange(String startDateStr, String endDateStr) throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
+        return appointmentRepository.getAll().stream()
+                .filter(appointment -> {
+                    LocalDate appointmentDate = LocalDate.parse(appointment.getDate(), formatter);
+                    return !appointmentDate.isBefore(startDate) && !appointmentDate.isAfter(endDate);
+                })
+                .collect(Collectors.toList());
+    }
 
 }
