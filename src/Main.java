@@ -28,7 +28,184 @@ public class Main {
         FileRepository<HealthRecord> hrFileRepo = new FileRepository<>("src/Files/HealthRecord.txt");
 
 
+        petRepository = new PetDBRepository("src/Repository/PetDBRepository.java", "user", "password");
+        userRepository = new UserDBRepository("src/Repository/UserDBRepository.java", "user", "password") {
+            @Override
+            public void update(Integer id, User entity) {
 
+            }
+
+            @Override
+            public void update(Disease obj) {
+
+            }
+
+            @Override
+            public void update(Appointment obj) {
+
+            }
+
+            @Override
+            public void update(HealthRecord obj) {
+
+            }
+
+            @Override
+            public void update(Notification obj) {
+
+            }
+
+            @Override
+            public void update(Pet obj) {
+
+            }
+
+            @Override
+            public void update(Pet_Disease obj) {
+
+            }
+
+            @Override
+            public void update(Test obj) {
+
+            }
+
+            @Override
+            public void update(Vaccine obj) {
+
+            }
+        };
+        diseaseRepository = new DiseaseDBRepository("src/Repository/DiseaseDBRepository.java", "user", "password") {
+            @Override
+            public void update(HealthRecord obj) {
+
+            }
+
+            @Override
+            public void update(Notification obj) {
+
+            }
+
+            @Override
+            public void update(Pet obj) {
+
+            }
+
+            @Override
+            public void update(Pet_Disease obj) {
+
+            }
+
+            @Override
+            public void update(Test obj) {
+
+            }
+
+            @Override
+            public void update(User obj) {
+
+            }
+
+            @Override
+            public void update(Vaccine obj) {
+
+            }
+        };
+        veterinarianRepository = new VeterinarianDBRepository("src/Repository/VeterinarianDBRepository.java", "user", "password");
+        appointmentRepository = new AppointmentDBRepository("src/Repository/AppointmentDBRepository.java", "user", "password") {
+            @Override
+            public void update(Disease obj) {
+
+            }
+
+            @Override
+            public void update(HealthRecord obj) {
+
+            }
+
+            @Override
+            public void update(Notification obj) {
+
+            }
+
+            @Override
+            public void update(Pet obj) {
+
+            }
+
+            @Override
+            public void update(Pet_Disease obj) {
+
+            }
+
+            @Override
+            public void update(Test obj) {
+
+            }
+
+            @Override
+            public void update(User obj) {
+
+            }
+
+            @Override
+            public void update(Vaccine obj) {
+
+            }
+        };
+        testRepository = new TestDBRepository("src/Repository/TestDBRepository.java", "user", "password");
+        vaccineRepository = new VaccineDBRepository("src/Repository/VaccineDBRepository.java", "user", "password");
+        healthRecordRepository = new HealthRecordDBRepository("src/Repository/HealthRecordDBRepository.java", "user", "password");
+        petDiseaseRepository = new Pet_DiseaseDBRepository("src/Repository/Pet_DiseaseDBRepository.java", "user", "password");
+        notificationRepository = new NotificationDBRepository("src/Repository/NotificationDBRepository.java", "user", "password") {
+            @Override
+            public void update(Integer id, Notification entity) {
+
+            }
+
+            @Override
+            public void update(Disease obj) {
+
+            }
+
+            @Override
+            public void update(Appointment obj) {
+
+            }
+
+            @Override
+            public void update(HealthRecord obj) {
+
+            }
+
+            @Override
+            public void update(Pet obj) {
+
+            }
+
+            @Override
+            public void update(Pet_Disease obj) {
+
+            }
+
+            @Override
+            public void update(Test obj) {
+
+            }
+
+            @Override
+            public void update(User obj) {
+
+            }
+
+            @Override
+            public void update(Vaccine obj) {
+
+            }
+        };
+
+
+//in memory
 //        Service service = new Service(
 //                petRepository,
 //                veterinarianRepository,
@@ -41,18 +218,31 @@ public class Main {
 //                userRepository
 //        );
 
+      //in file
+//        Service service = new Service(
+//                petFileRepo,
+//                vetFileRepo,
+//                appFileRepo,
+//                hrFileRepo,
+//                diseaseFileRepo,
+//                vaccineFileRepo,
+//                testFileRepo,
+//                notificationFileRepo,
+//                userRepository
+//        );
+
+        //database repository
         Service service = new Service(
-                petFileRepo,
-                vetFileRepo,
-                appFileRepo,
-                hrFileRepo,
-                diseaseFileRepo,
-                vaccineFileRepo,
-                testFileRepo,
-                notificationFileRepo,
+                petRepository,
+                veterinarianRepository,
+                appointmentRepository,
+                healthRecordRepository,
+                diseaseRepository,
+                vaccineRepository,
+                testRepository,
+                notificationRepository,
                 userRepository
         );
-
 
         Scanner scanner = new Scanner(System.in);
         UI ui = new UI(new Controller(service), scanner);

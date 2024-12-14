@@ -1,6 +1,9 @@
 package Model;
 
 import Utils.AppointmentType;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +73,10 @@ public class Appointment implements HasId {
         this.vaccines = vaccines == null ? new ArrayList<>() : vaccines;
     }
 
+    public Appointment(int appId, int petID, int vetID, String appointmentType, LocalDate date, LocalTime time, String tests, String vaccines) {
+
+    }
+
     // Getters and Setters
 
     /**
@@ -77,8 +84,8 @@ public class Appointment implements HasId {
      *
      * @return a list of tests
      */
-    public List<Test> getTests() {
-        return tests;
+    public String getTests() {
+        return tests.toString();
     }
 
     /**
@@ -86,8 +93,8 @@ public class Appointment implements HasId {
      *
      * @return a list of vaccines
      */
-    public List<Vaccine> getVaccines() {
-        return vaccines;
+    public String getVaccines() {
+        return vaccines.toString();
     }
 
     /**
@@ -149,7 +156,7 @@ public class Appointment implements HasId {
      *
      * @return the appointment type
      */
-    public AppointmentType getAppointmentType() {
+    public String getAppointmentType() {
         return AppointmentType;
     }
 
@@ -214,6 +221,10 @@ public class Appointment implements HasId {
      */
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public List<Test> getTests(String tests) {
+        return new ArrayList<>(); // Example return value
     }
 
     /**

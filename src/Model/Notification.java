@@ -51,6 +51,10 @@ public class Notification implements HasId {
         this.notificationType = notificationType;
     }
 
+    public Notification(int id, int userId, String title, String date, String notificationType) {
+        this.id = id;
+    }
+
     /**
      * Gets the unique identifier of the notification.
      *
@@ -129,7 +133,7 @@ public class Notification implements HasId {
      *
      * @return the type of the notification (e.g., confirmation, cancellation)
      */
-    public NotificationType getNotificationType() {
+    public String getNotificationType() {
         return notificationType;
     }
 

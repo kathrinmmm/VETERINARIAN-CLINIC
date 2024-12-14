@@ -21,6 +21,7 @@ public class HealthRecord implements HasId {
     private int petId;
     private List<Appointment> appointments;
     private List<Pet_Disease> petDiseases;
+    private String Appointment;
 
     /**
      * Constructs a HealthRecord object with a unique ID and a pet ID.
@@ -44,6 +45,10 @@ public class HealthRecord implements HasId {
         this.petId = petId;
         this.appointments = new ArrayList<>();
         this.petDiseases = new ArrayList<>();
+    }
+
+    public HealthRecord(int healthId, int petId, String appointments, String petDiseases) {
+        this.HealthId = healthId;
     }
 
     /**
@@ -78,8 +83,8 @@ public class HealthRecord implements HasId {
      *
      * @return the list of appointments
      */
-    public List<Appointment> getAppointments() {
-        return appointments;
+    public String getAppointments() {
+        return appointments.toString();
     }
 
     /**
@@ -87,8 +92,8 @@ public class HealthRecord implements HasId {
      *
      * @return the list of diseases
      */
-    public List<Pet_Disease> getPetDiseases() {
-        return petDiseases;
+    public String getPetDiseases() {
+        return petDiseases.toString();
     }
 
     /**
@@ -133,5 +138,9 @@ public class HealthRecord implements HasId {
                 ", PetId: " + petId +
                 ",\nAppointments: " + appointments +
                 ",\nDiseases: " + petDiseases;
+    }
+
+    public String getAppoitment() {
+        return Appointment;
     }
 }
