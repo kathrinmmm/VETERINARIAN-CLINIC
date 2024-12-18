@@ -48,6 +48,10 @@ public class Pet extends User {
         this.animalType = animalType;
     }
 
+    public Pet(int id, String name, String username, String password, String animalType) {
+        super(id, name, username, password);
+    }
+
     /**
      * Sets the type of animal for this pet.
      *

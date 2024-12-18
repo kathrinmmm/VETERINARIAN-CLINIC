@@ -16,7 +16,7 @@ public class Disease implements HasId {
 
     private Integer id;
     private String name;
-    private DiseaseType diseaseType;
+    private String diseaseType;
 
     /**
      * Constructs a Disease object with all fields.
@@ -25,7 +25,7 @@ public class Disease implements HasId {
      * @param name the name of the disease
      * @param diseaseType the type of the disease (e.g., bacterial, viral)
      */
-    public Disease(Integer id, String name, DiseaseType diseaseType) {
+    public Disease(Integer id, String name, String diseaseType) {
         this.id = id;
         this.name = name;
         this.diseaseType = diseaseType;
@@ -37,9 +37,17 @@ public class Disease implements HasId {
      * @param name the name of the disease
      * @param diseaseType the type of the disease (e.g., bacterial, viral)
      */
-    public Disease(String name, DiseaseType diseaseType) {
-        this.name = name;
-        this.diseaseType = diseaseType;
+    public Disease(int id, String name, String diseaseType) {
+       this.name=name;
+        this.id = id;
+        this.diseaseType= diseaseType;
+    }
+
+    public Disease(String disname, DiseaseType diseaseType) {
+    }
+
+    public Disease(int i, String canineParvo, DiseaseType diseaseType) {
+
     }
 
     /**
@@ -84,7 +92,7 @@ public class Disease implements HasId {
      *
      * @param diseaseType the disease type to set
      */
-    public void setDiseaseType(DiseaseType diseaseType) {
+    public void setDiseaseType(String diseaseType) {
         this.diseaseType = diseaseType;
     }
 
@@ -93,7 +101,7 @@ public class Disease implements HasId {
      *
      * @return the disease type
      */
-    public DiseaseType getDiseaseType() {
+    public String getDiseaseType() {
         return diseaseType;
     }
 
