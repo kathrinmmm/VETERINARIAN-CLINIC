@@ -34,6 +34,8 @@ public class Pet_Disease implements HasId {
         this.petid = petid;
         this.disease = disease;
     }
+    public Pet_Disease() {
+    }
 
     /**
      * Retrieves the ID of the pet associated with this disease.

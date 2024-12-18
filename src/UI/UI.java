@@ -1,10 +1,8 @@
 package UI;
 import Model.*;
-import Service.Service;
 import Controller.Controller;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -187,8 +185,8 @@ public class UI {
 
                     try {
                         TestType testType = TestType.valueOf(tinput);
-                        Test test = new Test(tname, testType);
-                        Controller.createTest(test);
+                        HealthTest healthTest = new HealthTest(tname, testType);
+                        Controller.createTest(healthTest);
                         System.out.println("Test added successfully!");
                     } catch (IllegalArgumentException e) {
                         System.out.println("The specified type is invalid.");
@@ -242,13 +240,13 @@ public class UI {
                     }
                     break;
                 case "4":
-                    List<Test> tests = Controller.getAllTests();
-                    if (tests.isEmpty()) {
+                    List<HealthTest> healthTests = Controller.getAllTests();
+                    if (healthTests.isEmpty()) {
                         System.out.println("No tests found.");
                     } else {
                         System.out.println("\nList of all tests:");
-                        for (Test test : tests) {
-                            System.out.println(test);
+                        for (HealthTest healthTest : healthTests) {
+                            System.out.println(healthTest);
                         }
                     }
                     break;
@@ -379,21 +377,21 @@ public class UI {
                     }
 
                     System.out.println("Available Tests.txt:");
-                    List<Test> tst = Controller.getAllTests();
-                    for (Test test : tst) {
-                        System.out.println(test.getId() + ": " + test.getName());
+                    List<HealthTest> tst = Controller.getAllTests();
+                    for (HealthTest healthTest : tst) {
+                        System.out.println(healthTest.getId() + ": " + healthTest.getName());
                     }
                     System.out.println("Enter test IDs separated by commas (or press Enter to skip):");
                     String testInput = scanner.nextLine();
-                    ArrayList<Test> selectedTests = new ArrayList<>();
+                    ArrayList<HealthTest> selectedHealthTests = new ArrayList<>();
                     if (!testInput.isBlank()) {
                         for (String id : testInput.split(",")) {
-                            Test test = tst.stream()
+                            HealthTest healthTest = tst.stream()
                                     .filter(t -> t.getId() == Integer.parseInt(id.trim()))
                                     .findFirst()
                                     .orElse(null);
-                            if (test != null) {
-                                selectedTests.add(test);
+                            if (healthTest != null) {
+                                selectedHealthTests.add(healthTest);
                             }
                         }
                     }
@@ -418,7 +416,7 @@ public class UI {
                     String type = scanner.nextLine().toUpperCase();
                     try {
                         AppointmentType appType= AppointmentType.valueOf(type);
-                        Appointment appointment = new Appointment( currentPetId, vetId, date, time, appType, selectedTests, selectedVaccines);
+                        Appointment appointment = new Appointment( currentPetId, vetId, date, time, appType, selectedHealthTests, selectedVaccines);
                         Controller.createAppointment(appointment);
                         Controller.sendConfirmationNotification(currentPetId);
                     } catch (IllegalArgumentException e) {
@@ -544,21 +542,21 @@ public class UI {
                     }
 
                     System.out.println("Available Tests.txt:");
-                    List<Test> tst = Controller.getAllTests();
-                    for (Test test : tst) {
-                        System.out.println(test.getId() + ": " + test.getName());
+                    List<HealthTest> tst = Controller.getAllTests();
+                    for (HealthTest healthTest : tst) {
+                        System.out.println(healthTest.getId() + ": " + healthTest.getName());
                     }
                     System.out.println("Enter test IDs separated by commas (or press Enter to skip):");
                     String testInput = scanner.nextLine();
-                    ArrayList<Test> selectedTests = new ArrayList<>();
+                    ArrayList<HealthTest> selectedHealthTests = new ArrayList<>();
                     if (!testInput.isBlank()) {
                         for (String id : testInput.split(",")) {
-                            Test test = tst.stream()
+                            HealthTest healthTest = tst.stream()
                                     .filter(t -> t.getId() == Integer.parseInt(id.trim()))
                                     .findFirst()
                                     .orElse(null);
-                            if (test != null) {
-                                selectedTests.add(test);
+                            if (healthTest != null) {
+                                selectedHealthTests.add(healthTest);
                             }
                         }
                     }
@@ -581,7 +579,7 @@ public class UI {
                     String type = scanner.nextLine().toUpperCase();
                     try {
                         AppointmentType appType= AppointmentType.valueOf(type);
-                        Appointment appointment = new Appointment( petId, currentVetId, date, time, appType, selectedTests, selectedVaccines);
+                        Appointment appointment = new Appointment( petId, currentVetId, date, time, appType, selectedHealthTests, selectedVaccines);
                         Controller.createAppointment(appointment);
                         System.out.println("Appointment added successfully!");
                     } catch (IllegalArgumentException e) {

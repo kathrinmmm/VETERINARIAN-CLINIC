@@ -23,7 +23,7 @@ public class Appointment implements HasId {
     private AppointmentType AppointmentType;
     private String date;
     private String time;
-    private List<Test> tests;
+    private List<HealthTest> healthTests;
     private List<Vaccine> vaccines;
 
     /**
@@ -35,17 +35,17 @@ public class Appointment implements HasId {
      * @param date the date of the appointment
      * @param time the time of the appointment
      * @param appointmentType the type of the appointment (e.g., check-up, emergency)
-     * @param tests the list of tests associated with the appointment
+     * @param healthTests the list of tests associated with the appointment
      * @param vaccines the list of vaccines associated with the appointment
      */
-    public Appointment(int appId, int petId, int vetId, String date, String time, AppointmentType appointmentType, List<Test> tests, List<Vaccine> vaccines) {
+    public Appointment(int appId, int petId, int vetId, String date, String time, AppointmentType appointmentType, List<HealthTest> healthTests, List<Vaccine> vaccines) {
         this.AppId = appId;
         this.PetId = petId;
         this.VetId = vetId;
         this.date = date;
         this.time = time;
         this.AppointmentType = appointmentType;
-        this.tests = tests == null ? new ArrayList<>() : tests;
+        this.healthTests = healthTests == null ? new ArrayList<>() : healthTests;
         this.vaccines = vaccines == null ? new ArrayList<>() : vaccines;
     }
 
@@ -57,16 +57,16 @@ public class Appointment implements HasId {
      * @param date the date of the appointment
      * @param time the time of the appointment
      * @param appointmentType the type of the appointment (e.g., check-up, emergency)
-     * @param tests the list of tests associated with the appointment
+     * @param healthTests the list of tests associated with the appointment
      * @param vaccines the list of vaccines associated with the appointment
      */
-    public Appointment(int petId, int vetId, String date, String time, AppointmentType appointmentType, List<Test> tests, List<Vaccine> vaccines) {
+    public Appointment(int petId, int vetId, String date, String time, AppointmentType appointmentType, List<HealthTest> healthTests, List<Vaccine> vaccines) {
         this.PetId = petId;
         this.VetId = vetId;
         this.date = date;
         this.time = time;
         this.AppointmentType = appointmentType;
-        this.tests = tests == null ? new ArrayList<>() : tests;
+        this.healthTests = healthTests == null ? new ArrayList<>() : healthTests;
         this.vaccines = vaccines == null ? new ArrayList<>() : vaccines;
     }
 
@@ -77,8 +77,8 @@ public class Appointment implements HasId {
      *
      * @return a list of tests
      */
-    public List<Test> getTests() {
-        return tests;
+    public List<HealthTest> getTests() {
+        return healthTests;
     }
 
     /**
@@ -93,10 +93,10 @@ public class Appointment implements HasId {
     /**
      * Sets the list of tests associated with this appointment.
      *
-     * @param tests the list of tests to set
+     * @param healthTests the list of tests to set
      */
-    public void setTests(List<Test> tests) {
-        this.tests = tests;
+    public void setTests(List<HealthTest> healthTests) {
+        this.healthTests = healthTests;
     }
 
     /**
@@ -239,7 +239,7 @@ public class Appointment implements HasId {
                 ", AppointmentType: " + AppointmentType +
                 ", Date: '" + date + '\'' +
                 ", Time: '" + time + '\'' +
-                ", \nTests: " + tests +
+                ", \nTests: " + healthTests +
                 ", \nVaccines: " + vaccines + '}';
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@code HealthRecord} class represents the health record of a pet. It contains
+ * The {@code HealthRecord.txt} class represents the health record of a pet. It contains
  * details such as the pet's appointments and diseases. Each health record is associated
  * with a unique ID and a specific pet ID.
  * <p>
@@ -23,7 +23,7 @@ public class HealthRecord implements HasId {
     private List<Pet_Disease> petDiseases;
 
     /**
-     * Constructs a HealthRecord object with a unique ID and a pet ID.
+     * Constructs a HealthRecord.txt object with a unique ID and a pet ID.
      *
      * @param HealthId the unique health record ID
      * @param petId the ID of the pet associated with this health record
@@ -36,16 +36,16 @@ public class HealthRecord implements HasId {
     }
 
     /**
-     * Constructs a HealthRecord object without specifying the health record ID.
+     * Constructs a HealthRecord.txt object without specifying the health record ID.
      *
      * @param petId the ID of the pet associated with this health record
      */
-    public HealthRecord(int petId) {
+    public HealthRecord(int HealthId, int petId , List<Appointment> appointments, List<Pet_Disease> petDiseases) {
+        this.HealthId = HealthId;
         this.petId = petId;
         this.appointments = new ArrayList<>();
         this.petDiseases = new ArrayList<>();
     }
-
     /**
      * Sets the health record ID.
      *
@@ -129,9 +129,9 @@ public class HealthRecord implements HasId {
      */
     @Override
     public String toString() {
-        return "HealthRecord Id: " + HealthId +
+        return "HealthRecord.txt Id: " + HealthId +
                 ", PetId: " + petId +
                 ",\nAppointments: " + appointments +
-                ",\nDiseases: " + petDiseases;
+                ",\nDiseases.txt: " + petDiseases;
     }
 }

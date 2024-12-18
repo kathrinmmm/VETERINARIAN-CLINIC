@@ -2,16 +2,14 @@ package Service;
 import Utils.*;
 import Model.*;
 import Repository.IRepository;
+import Exception.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Service class that acts as an intermediary between the repositories and the user interface.
@@ -24,9 +22,10 @@ public class Service {
     private final IRepository<HealthRecord> healthRecordRepository;
     private final IRepository<Disease> diseaseRepository;
     private final IRepository<Vaccine> vaccineRepository;
-    private final IRepository<Test> testRepository;
+    private final IRepository<HealthTest> testRepository;
     private final IRepository<Notification> notificationRepository;
-    private final IRepository<User> userRepository;
+    //private final IRepository<User> userRepository;
+    private final IRepository<Pet_Disease> petDiseaseRepository;
     private Integer loggedInUserId = null;
     /**
      * Constructs a Service object with the specified repositories for various entities.
@@ -39,9 +38,9 @@ public class Service {
      * @param vaccineRepository  The repository for managing vaccines.
      * @param testRepository     The repository for managing tests.
      * @param notificationRepository The repository for managing notifications.
-     * @param userRepository     The repository for managing users.
+    //* @param userRepository     The repository for managing users.
      */
-    public Service(IRepository<Pet> petRepo, IRepository<Veterinarian> vetRepo, IRepository<Appointment> appRepo, IRepository<HealthRecord> hrRepo, IRepository<Disease> diseaseRepository, IRepository<Vaccine> vaccineRepository, IRepository<Test> testRepository, IRepository<Notification> notificationRepository, IRepository<User> userRepository) {
+    public Service(IRepository<Pet> petRepo, IRepository<Veterinarian> vetRepo, IRepository<Appointment> appRepo, IRepository<HealthRecord> hrRepo, IRepository<Disease> diseaseRepository, IRepository<Vaccine> vaccineRepository, IRepository<HealthTest> testRepository, IRepository<Notification> notificationRepository, IRepository<Pet_Disease> petDiseaseRepository ) {
         this.petRepository = petRepo;
         this.vetRepository = vetRepo;
         this.appointmentRepository = appRepo;
@@ -50,8 +49,9 @@ public class Service {
         this.vaccineRepository = vaccineRepository;
         this.testRepository = testRepository;
         this.notificationRepository = notificationRepository;
-        this.userRepository = userRepository;
-        initializeRepositories();
+        this.petDiseaseRepository= petDiseaseRepository;
+        //this.userRepository = userRepository;
+        //initializeRepositories();
         this.loggedInUserId = null;
     }
     /**
@@ -132,34 +132,34 @@ public class Service {
         diseaseRepository.create(dis15);
 
 
-        Test test1=new Test(1,"IgE",TestType.ALLERGY);
-        Test test2=new Test(2,"Intradermal Allergy Testing",TestType.ALLERGY);
-        Test test3=new Test(3,"Patch Testing",TestType.ALLERGY);
-        Test test4=new Test(4,"Complete Blood Count",TestType.BLOOD);
-        Test test5=new Test(5,"Biochemistry Panel ",TestType.BLOOD);
-        Test test6=new Test(6,"Coagulation Profile",TestType.BLOOD);
-        Test test7=new Test(7,"Abdominal Radiographs ",TestType.X_RAY);
-        Test test8=new Test(8,"Thoracic Radiographs ",TestType.X_RAY);
-        Test test9=new Test(9,"Dental Radiographs ",TestType.X_RAY);
-        Test test10=new Test(10,"Abdominal Ultrasound",TestType.ULTRASOUND);
-        Test test11=new Test(11,"Cardiac Ultrasound",TestType.ULTRASOUND);
-        Test test12=new Test(12,"Pregnancy Ultrasound",TestType.ULTRASOUND);
-        testRepository.create(test1);
-        testRepository.create(test2);
-        testRepository.create(test3);
-        testRepository.create(test4);
-        testRepository.create(test5);
-        testRepository.create(test6);
-        testRepository.create(test7);
-        testRepository.create(test8);
-        testRepository.create(test9);
-        testRepository.create(test10);
-        testRepository.create(test11);
-        testRepository.create(test12);
+        HealthTest healthTest1 =new HealthTest(1,"IgE",TestType.ALLERGY);
+        HealthTest healthTest2 =new HealthTest(2,"Intradermal Allergy Testing",TestType.ALLERGY);
+        HealthTest healthTest3 =new HealthTest(3,"Patch Testing",TestType.ALLERGY);
+        HealthTest healthTest4 =new HealthTest(4,"Complete Blood Count",TestType.BLOOD);
+        HealthTest healthTest5 =new HealthTest(5,"Biochemistry Panel ",TestType.BLOOD);
+        HealthTest healthTest6 =new HealthTest(6,"Coagulation Profile",TestType.BLOOD);
+        HealthTest healthTest7 =new HealthTest(7,"Abdominal Radiographs ",TestType.X_RAY);
+        HealthTest healthTest8 =new HealthTest(8,"Thoracic Radiographs ",TestType.X_RAY);
+        HealthTest healthTest9 =new HealthTest(9,"Dental Radiographs ",TestType.X_RAY);
+        HealthTest healthTest10 =new HealthTest(10,"Abdominal Ultrasound",TestType.ULTRASOUND);
+        HealthTest healthTest11 =new HealthTest(11,"Cardiac Ultrasound",TestType.ULTRASOUND);
+        HealthTest healthTest12 =new HealthTest(12,"Pregnancy Ultrasound",TestType.ULTRASOUND);
+        testRepository.create(healthTest1);
+        testRepository.create(healthTest2);
+        testRepository.create(healthTest3);
+        testRepository.create(healthTest4);
+        testRepository.create(healthTest5);
+        testRepository.create(healthTest6);
+        testRepository.create(healthTest7);
+        testRepository.create(healthTest8);
+        testRepository.create(healthTest9);
+        testRepository.create(healthTest10);
+        testRepository.create(healthTest11);
+        testRepository.create(healthTest12);
 
 
-        Appointment app1 = new Appointment(1, 1, 3, "28-12-2024","18:30", AppointmentType.ROUTINE,List.of(test1), List.of(vac1));
-        Appointment app2=new Appointment(2,2,2,"25-11-2024","12:00",AppointmentType.ROUTINE,List.of(), List.of());
+        Appointment app1 = new Appointment(1, 1, 3, "2024-12-10","18:30", AppointmentType.ROUTINE,List.of(healthTest1), List.of(vac1));
+        Appointment app2=new Appointment(2,2,2,"2024-12-17","12:00",AppointmentType.ROUTINE,List.of(), List.of());
         appointmentRepository.create(app1);
         appointmentRepository.create(app2);
         hr1.addAppointment(app1);
@@ -171,7 +171,12 @@ public class Service {
      * @param id The ID of the pet to be deleted.
      */
 
-    public void deletePet(Integer id){
+    public void deletePet(Integer id) throws EntityNotFoundException {
+
+        Pet pet = petRepository.getAll().stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Pet with id " + id + " not found"));
         petRepository.delete(id);
     }
     /**
@@ -179,7 +184,16 @@ public class Service {
      *
      * @param id The ID of the veterinarian to be deleted.
      */
-    public void deleteVet(Integer id){
+    public void deleteVet(Integer id) throws EntityNotFoundException, ValidationException {
+        if (id == null || id <= 0) {
+            throw new ValidationException("Veterinarian ID must be valid.");
+        }
+
+        Veterinarian vet = vetRepository.getAll().stream()
+                .filter(v -> v.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Veterinarian with ID " + id + " not found"));
+
         vetRepository.delete(id);
     }
     /**
@@ -187,7 +201,16 @@ public class Service {
      *
      * @param id The ID of the appointment to be deleted.
      */
-    public void deleteApp(Integer id){
+    public void deleteApp(Integer id) throws EntityNotFoundException, ValidationException {
+        if (id == null || id <= 0) {
+            throw new ValidationException("Appointment ID must be valid.");
+        }
+
+        Appointment appointment = appointmentRepository.getAll().stream()
+                .filter(a -> a.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Appointment with ID " + id + " not found"));
+
         appointmentRepository.delete(id);
     }
     /**
@@ -195,10 +218,32 @@ public class Service {
      *
      * @param pet The pet to be added.
      */
-    public void addPet(Pet pet) {
+    public void addPet(Pet pet) throws ValidationException,LogicException {
+        if (pet == null) {
+            throw new ValidationException("Pet object cannot be null.");
+        }
+        if (pet.getUsername() == null || pet.getUsername().trim().isEmpty()) {
+            throw new ValidationException("Username cannot be null or empty.");
+        }
+        if (pet.getName() == null || pet.getName().trim().isEmpty()) {
+            throw new ValidationException("Pet name cannot be null or empty.");
+        }
+        if (pet.getAnimalType() == null) {
+            throw new ValidationException("Pet animal type cannot be null.");
+        }
+
+        Optional<Pet> existingPet = petRepository.getAll().stream()
+                .filter(existing -> existing.getUsername().equalsIgnoreCase(pet.getUsername()))
+                .findFirst();
+
+        if (existingPet.isPresent()) {
+            throw new LogicException("A pet with the same username already exists: " + pet.getUsername());
+        }
+
         pet.setId(IdGenerator.generatePetId());
         petRepository.create(pet);
-        HealthRecord healthRecord = new HealthRecord(IdGenerator.getHRId(), pet.getId() );
+
+        HealthRecord healthRecord = new HealthRecord(IdGenerator.getHRId(), pet.getId());
         healthRecordRepository.create(healthRecord);
 
     }
@@ -208,7 +253,22 @@ public class Service {
      * @param vet The veterinarian to be added.
      */
 
-    public void addVeterinarian(Veterinarian vet) {
+    public void addVeterinarian(Veterinarian vet) throws ValidationException, LogicException{
+        if (vet.getName() == null || vet.getName().isEmpty()) {
+            throw new ValidationException("Veterinarian name cannot be null or empty");
+        }
+        if (vet.getSpecialization() == null) {
+            throw new ValidationException("Veterinarian specialization cannot be null");
+        }
+        Optional<Veterinarian> existingVet = vetRepository.getAll().stream()
+                .filter(existing -> existing.getUsername().equalsIgnoreCase(vet.getUsername()))
+                .findFirst();
+
+        if (existingVet.isPresent()) {
+            throw new LogicException("A vet with the same username already exists: " + vet.getUsername());
+        }
+
+
         vet.setId(IdGenerator.generateVetId());
         vetRepository.create(vet);
     }
@@ -217,16 +277,71 @@ public class Service {
      *
      * @param app The appointment to be added.
      */
-    public void addAppointment(Appointment app) {
+    public void addAppointment(Appointment app) throws LogicException, ValidationException, EntityNotFoundException {
+        if (app == null) {
+            throw new ValidationException("Appointment object cannot be null.");
+        }
+        if (app.getPetId() <= 0) {
+            throw new ValidationException("PetId must be a valid positive integer.");
+        }
+        if (app.getVetId() <= 0) {
+            throw new ValidationException("VetId must be a valid positive integer.");
+        }
+        if (app.getDate() == null) {
+            throw new ValidationException("Appointment date cannot be null.");
+        }
+        if (app.getTime() == null) {
+            throw new ValidationException("Appointment time cannot be null.");
+        }
+
+        try {
+            LocalDate.parse(app.getDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            throw new ValidationException("Invalid date format. Expected yyyy-MM-dd.");
+        }
+
+        try {
+            LocalTime.parse(app.getTime(), DateTimeFormatter.ofPattern("HH:mm"));
+        } catch (DateTimeParseException e) {
+            throw new ValidationException("Invalid time format. Expected HH:mm.");
+        }
+
+        boolean petExists = petRepository.getAll().stream()
+                .anyMatch(pet -> pet.getId().equals(app.getPetId()));
+        if (!petExists) {
+            throw new EntityNotFoundException("Pet with ID " + app.getPetId() + " does not exist.");
+        }
+
+        boolean vetExists = vetRepository.getAll().stream()
+                .anyMatch(vet -> vet.getId().equals(app.getVetId()));
+        if (!vetExists) {
+            throw new EntityNotFoundException("Veterinarian with ID " + app.getVetId() + " does not exist.");
+        }
+
+        boolean isDuplicate = appointmentRepository.getAll().stream()
+                .anyMatch(existingApp -> existingApp.getDate().equals(app.getDate())
+                        && existingApp.getTime().equals(app.getTime())
+                        && existingApp.getVetId() == app.getVetId());
+
+        if (isDuplicate) {
+            throw new LogicException("An appointment already exists for the same vet at the given date and time.");
+        }
+
         app.setAppId(IdGenerator.getAppId());
+
         appointmentRepository.create(app);
+
         HealthRecord healthRecord = healthRecordRepository.getAll().stream()
-                .filter(hr -> hr.getPetId()==app.getPetId())
+                .filter(hr -> hr.getPetId() == app.getPetId())
                 .findFirst()
                 .orElse(null);
 
         if (healthRecord != null) {
             healthRecord.addAppointment(app);
+
+            healthRecordRepository.update(healthRecord.getId(), healthRecord);
+        } else {
+            throw new LogicException("HealthRecord not found for PetId: " + app.getPetId());
         }
     }
     /**
@@ -235,7 +350,23 @@ public class Service {
      * @param disease The disease to be added.
      */
 
-    public void addDisease(Disease disease){
+    public void addDisease(Disease disease) throws ValidationException, LogicException{
+        if (disease == null) {
+            throw new ValidationException("Disease object cannot be null.");
+        }
+        if (disease.getName() == null || disease.getName().trim().isEmpty()) {
+            throw new ValidationException("Disease name cannot be null or empty.");
+        }
+        if (disease.getDiseaseType() == null) {
+            throw new ValidationException("Disease type cannot be null.");
+        }
+
+        boolean exists = diseaseRepository.getAll().stream()
+                .anyMatch(existingDisease -> existingDisease.getName().equalsIgnoreCase(disease.getName()));
+        if (exists) {
+            throw new LogicException("Disease with name '" + disease.getName() + "' already exists.");
+        }
+
         disease.setId(IdGenerator.getDiseaseId());
         diseaseRepository.create(disease);
     }
@@ -245,15 +376,40 @@ public class Service {
      * @param petId   The ID of the pet.
      * @param disease The disease to be added.
      */
-    public void addDiseaseToPet(int petId, Disease disease) {
+    public void addDiseaseToPet(int petId, Disease disease) throws EntityNotFoundException, ValidationException, LogicException{
+        if (petId <= 0) {
+            throw new ValidationException("Invalid pet ID.");
+        }
+
+        if (disease == null || disease.getId() == null) {
+            throw new ValidationException("Disease object or ID cannot be null.");
+        }
+
         HealthRecord healthRecord = healthRecordRepository.getAll().stream()
-                .filter(hr -> hr.getPetId()==(petId))
+                .filter(hr -> hr.getPetId()==petId)
                 .findFirst()
                 .orElse(null);
 
-        if (healthRecord != null) {
-            healthRecord.addDisease(petId,disease);
+        if (healthRecord == null) {
+            throw new EntityNotFoundException("HealthRecord not found for petId: " + petId);
         }
+
+        boolean diseaseAlreadyAdded = healthRecord.getPetDiseases().stream()
+                .anyMatch(existingDisease -> existingDisease.getId().equals(disease.getId()));
+
+        if (diseaseAlreadyAdded) {
+            throw new LogicException("The disease is already associated with the pet.");
+        }
+
+        healthRecord.addDisease(petId, disease);
+        healthRecordRepository.update(healthRecord.getId(), healthRecord);
+
+        Pet_Disease petDisease = new Pet_Disease();
+        petDisease.setId(IdGenerator.getNextPetDiseaseId());
+        petDisease.setPetid(petId);
+        petDisease.setDisease(disease);
+
+        petDiseaseRepository.create(petDisease);
     }
 
     /**
@@ -262,37 +418,90 @@ public class Service {
      * @param petId The ID of the pet whose health record is to be retrieved.
      * @return The health record of the pet.
      */
-    public HealthRecord getHealthRecordByPetId(int petId) {
+    public HealthRecord getHealthRecordByPetId(int petId) throws EntityNotFoundException {
         return healthRecordRepository.getAll().stream()
-                .filter(hr -> hr.getPetId()==(petId))
+                .filter(hr -> hr.getPetId() == petId)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException("HealthRecord not found for petId: " + petId));
     }
+
     /**
      * Adds a new vaccine to the vaccine repository.
      *
      * @param vaccine The vaccine to be added.
      */
 
-    public void addVaccine(Vaccine vaccine){
+    public void addVaccine(Vaccine vaccine)throws LogicException, ValidationException{
+        if (vaccine == null) {
+            throw new ValidationException("Vaccine object cannot be null.");
+        }
+        if (vaccine.getName() == null || vaccine.getName().trim().isEmpty()) {
+            throw new ValidationException("Vaccine name cannot be null or empty.");
+        }
+        if (vaccine.getVaccineType() == null) {
+            throw new ValidationException("Vaccie type cannot be null.");
+        }
+
+        boolean exists = vaccineRepository.getAll().stream()
+                .anyMatch(existingVacc -> existingVacc.getName().equalsIgnoreCase(vaccine.getName()));
+        if (exists) {
+            throw new LogicException("Vaccine with name '" + vaccine.getName() + "' already exists.");
+        }
         vaccine.setId(IdGenerator.getVaccineId());
         vaccineRepository.create(vaccine);
     }
     /**
      * Adds a new test to the test repository.
      *
-     * @param test The test to be added.
+     * @param healthTest The test to be added.
      */
-    public void addTest(Test test){
-        test.setId(IdGenerator.getTestId());
-        testRepository.create(test);
+    public void addTest(HealthTest healthTest) throws LogicException, ValidationException{
+        if (healthTest == null) {
+            throw new ValidationException("Test object cannot be null.");
+        }
+        if (healthTest.getName() == null || healthTest.getName().trim().isEmpty()) {
+            throw new ValidationException("Test name cannot be null or empty.");
+        }
+        if (healthTest.getTestType() == null) {
+            throw new ValidationException("Test type cannot be null.");
+        }
+
+        boolean exists = testRepository.getAll().stream()
+                .anyMatch(existingVacc -> existingVacc.getName().equalsIgnoreCase(healthTest.getName()));
+        if (exists) {
+            throw new LogicException("Test with name '" + healthTest.getName() + "' already exists.");
+        }
+        healthTest.setId(IdGenerator.getTestId());
+        testRepository.create(healthTest);
+    }
+
+    private boolean isValidDate(String date) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate.parse(date, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
     /**
      * Adds a new notification to the notification repository.
      *
      * @param n The notification to be added.
      */
-    public void addNotification(Notification n) {
+    public void addNotification(Notification n)throws ValidationException, LogicException {
+        if (n.getUserId() <= 0) {
+            throw new ValidationException("Invalid User ID.");
+        }
+        if (n.getTitle() == null || n.getTitle().trim().isEmpty()) {
+            throw new ValidationException("Notification title cannot be null or empty.");
+        }
+        if (n.getDate() == null || !isValidDate(n.getDate())) {
+            throw new ValidationException("Notification date must be a valid date in the format yyyy-MM-dd.");
+        }
+        if (n.getNotificationType() == null) {
+            throw new ValidationException("Notification type cannot be null.");
+        }
         notificationRepository.create(n);
     }
     /**
@@ -301,8 +510,12 @@ public class Service {
      * @return A list of all pets.
      */
 
-    public List<Pet> getAllPets() {
-        return petRepository.getAll();
+    public List<Pet> getAllPets()throws EntityNotFoundException {
+        List<Pet> pets = petRepository.getAll();
+        if (pets == null || pets.isEmpty()) {
+            throw new EntityNotFoundException("No pets found in the system.");
+        }
+        return pets;
     }
     /**
      * Retrieves a list of all veterinarians in the repository.
@@ -310,8 +523,12 @@ public class Service {
      * @return A list of all veterinarians.
      */
 
-    public List<Veterinarian> getAllVeterinarians() {
-        return vetRepository.getAll();
+    public List<Veterinarian> getAllVeterinarians() throws EntityNotFoundException{
+        List<Veterinarian> veterinarians = vetRepository.getAll();
+        if (veterinarians == null || veterinarians.isEmpty()) {
+            throw new EntityNotFoundException("No veterinarians found in the system.");
+        }
+        return veterinarians;
     }
     /**
      * Retrieves a list of all diseases in the repository.
@@ -319,8 +536,12 @@ public class Service {
      * @return A list of all diseases.
      */
 
-    public List<Disease> getAllDiseases(){
-        return diseaseRepository.getAll();
+    public List<Disease> getAllDiseases()throws EntityNotFoundException{
+        List<Disease> diseases = diseaseRepository.getAll();
+        if (diseases == null || diseases.isEmpty()) {
+            throw new EntityNotFoundException("No diseases found in the system.");
+        }
+        return diseases;
     }
     /**
      * Retrieves a list of all tests in the repository.
@@ -328,24 +549,36 @@ public class Service {
      * @return A list of all tests.
      */
 
-    public List<Test> getAllTests(){
-        return testRepository.getAll();
+    public List<HealthTest> getAllTests()throws EntityNotFoundException{
+        List<HealthTest> healthTests = testRepository.getAll();
+        if (healthTests == null || healthTests.isEmpty()) {
+            throw new EntityNotFoundException("No tests found in the system.");
+        }
+        return healthTests;
     }
     /**
      * Retrieves a list of all appointments in the repository.
      *
      * @return A list of all appointments.
      */
-    public List<Appointment> getAllAppointments(){
-        return appointmentRepository.getAll();
+    public List<Appointment> getAllAppointments()throws EntityNotFoundException{
+        List<Appointment> appointments = appointmentRepository.getAll();
+        if (appointments == null || appointments.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found in the system.");
+        }
+        return appointments;
     }
     /**
      * Retrieves a list of all vaccines in the repository.
      *
      * @return A list of all vaccines.
      */
-    public List<Vaccine> getAllVaccines(){
-        return vaccineRepository.getAll();
+    public List<Vaccine> getAllVaccines()throws EntityNotFoundException{
+        List<Vaccine> vaccines = vaccineRepository.getAll();
+        if (vaccines == null || vaccines.isEmpty()) {
+            throw new EntityNotFoundException("No vaccines found in the system.");
+        }
+        return vaccines;
     }
     /**
      * Retrieves a list of appointments for a specific date.
@@ -353,10 +586,16 @@ public class Service {
      * @param date The date for which appointments are to be retrieved.
      * @return A list of appointments on the specified date.
      */
-    public List<Appointment> getAppointmentsByDate(String date) {
-        return appointmentRepository.getAll().stream()
+    public List<Appointment> getAppointmentsByDate(String date) throws EntityNotFoundException{
+        List<Appointment> appointments = appointmentRepository.getAll().stream()
                 .filter(app -> app.getDate().equals(date))
                 .collect(Collectors.toList());
+
+        if (appointments.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found for the specified date: " + date);
+        }
+
+        return appointments;
     }
     /**
      * Retrieves a list of appointments for a specific pet.
@@ -364,10 +603,16 @@ public class Service {
      * @param petId The ID of the pet for which appointments are to be retrieved.
      * @return A list of appointments for the specified pet.
      */
-    public List<Appointment> getAppointmentsByPet(int petId) {
-        return appointmentRepository.getAll().stream()
+    public List<Appointment> getAppointmentsByPet(int petId) throws EntityNotFoundException{
+        List<Appointment> appointments = appointmentRepository.getAll().stream()
                 .filter(app -> app.getPetId() == petId)
                 .collect(Collectors.toList());
+
+        if (appointments.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found for petId: " + petId);
+        }
+
+        return appointments;
     }
 
     /**
@@ -376,10 +621,16 @@ public class Service {
      * @param vetId The ID of the veterinarian for which appointments are to be retrieved.
      * @return A list of appointments for the specified veterinarian.
      */
-    public List<Appointment> getAppointmentsByVet(int vetId) {
-        return appointmentRepository.getAll().stream()
+    public List<Appointment> getAppointmentsByVet(int vetId) throws EntityNotFoundException{
+        List<Appointment> appointments = appointmentRepository.getAll().stream()
                 .filter(app -> app.getVetId() == vetId)
                 .collect(Collectors.toList());
+
+        if (appointments.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found for vetId: " + vetId);
+        }
+
+        return appointments;
     }
     /**
      * Retrieves a list of notifications for a specific user.
@@ -387,10 +638,16 @@ public class Service {
      * @param userId The ID of the user for which notifications are to be retrieved.
      * @return A list of notifications for the specified user.
      */
-    public List<Notification> getNotificationsByUserId(int userId) {
-        return notificationRepository.getAll().stream()
+    public List<Notification> getNotificationsByUserId(int userId) throws EntityNotFoundException{
+        List<Notification> notifications = notificationRepository.getAll().stream()
                 .filter(notification -> notification.getUserId() == userId)
                 .collect(Collectors.toList());
+
+        if (notifications.isEmpty()) {
+            throw new EntityNotFoundException("No notifications found for userId: " + userId);
+        }
+
+        return notifications;
     }
     /**
      * Sends a notification to a user.
@@ -401,15 +658,17 @@ public class Service {
      * @param message The content of the notification.
      * @param notificationType The type of notification (e.g., reminder, vacation, etc.).
      */
-    public void sendNotificationToUser(Integer userId, String message, NotificationType notificationType) {
-        Notification notification = new Notification(
-                IdGenerator.getNotifId(),
-                userId,
-                message,
-                LocalDate.now().toString(),
-                notificationType
-        );
-        addNotification(notification);
+    public void sendNotificationToUser(Integer userId, String message, NotificationType notificationType){
+        try {
+            Notification notification = new Notification(
+                    IdGenerator.getNotifId(),
+                    userId,
+                    message,
+                    LocalDate.now().toString(),
+                    notificationType
+            );
+            addNotification(notification);
+        }catch (ValidationException e){System.out.println("Validation Exception: " + e.getMessage());}
     }
 
     /**
@@ -434,10 +693,16 @@ public class Service {
      * @param type The type of notifications to retrieve (e.g., reminders, alerts, etc.).
      * @return A list of notifications matching the specified type.
      */
-    public List<Notification> getNotificationsByType(NotificationType type) {
-        return notificationRepository.getAll().stream()
+    public List<Notification> getNotificationsByType(NotificationType type) throws EntityNotFoundException{
+        List<Notification> notifications = notificationRepository.getAll().stream()
                 .filter(notification -> notification.getNotificationType() == type)
                 .collect(Collectors.toList());
+
+        if (notifications.isEmpty()) {
+            throw new EntityNotFoundException("No notifications found for the specified type: " + type);
+        }
+
+        return notifications;
     }
     /**
      * Sends reminders for upcoming appointments for a specific pet.
@@ -446,17 +711,25 @@ public class Service {
      * @param petId The ID of the pet for which appointment reminders should be sent.
      * @return A list of appointments that are scheduled within the next 3 days.
      */
-    public List<Appointment> sendAppointmentReminders(Integer petId) {
+    public List<Appointment> sendAppointmentReminders(Integer petId) throws EntityNotFoundException{
         List<Appointment> appointments = getAllAppointments();
-        LocalDate today = LocalDate.now();
 
+        if (appointments == null || appointments.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found for petId: " + petId);
+        }
+
+        LocalDate today = LocalDate.now();
         List<Appointment> upcomingAppointments = appointments.stream()
                 .filter(app -> app.getPetId() == petId)
                 .filter(app -> {
-                    LocalDate appDate = LocalDate.parse(app.getDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                    LocalDate appDate = LocalDate.parse(app.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     return !appDate.isBefore(today) && appDate.isBefore(today.plusDays(3));
                 })
                 .collect(Collectors.toList());
+
+        if (upcomingAppointments.isEmpty()) {
+            throw new EntityNotFoundException("No upcoming appointments found for petId: " + petId);
+        }
 
         return upcomingAppointments;
     }
@@ -478,13 +751,24 @@ public class Service {
      * If appointments are canceled, a vacation notification is sent to affected users.
      *
      * @param vetId The ID of the veterinarian whose appointments should be canceled.
-     * @param startDateStr The start date of the period in "dd-MM-yyyy" format.
-     * @param endDateStr The end date of the period in "dd-MM-yyyy" format.
+     * @param startDateStr The start date of the period in "yyyy-MM-dd" format.
+     * @param endDateStr The end date of the period in "yyyy-MM-dd" format.
      */
-    public void cancelAppointmentsForVetInPeriod(Integer vetId, String startDateStr, String endDateStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+    public void cancelAppointmentsForVetInPeriod(Integer vetId, String startDateStr, String endDateStr) throws EntityNotFoundException,ValidationException{
+        if (vetId == null || vetId <= 0) {
+            throw new ValidationException("Invalid veterinarian ID.");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate;
+        LocalDate endDate;
+
+        try {
+            startDate = LocalDate.parse(startDateStr, formatter);
+            endDate = LocalDate.parse(endDateStr, formatter);
+        } catch (DateTimeParseException e) {
+            throw new ValidationException("Invalid date format, expected yyyy-MM-dd.");
+        }
 
         List<Appointment> appointmentsToCancel = appointmentRepository.getAll().stream()
                 .filter(app -> app.getVetId() == vetId)
@@ -494,10 +778,13 @@ public class Service {
                 })
                 .collect(Collectors.toList());
 
+        if (appointmentsToCancel.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found for the veterinarian in the specified date range.");
+        }
 
         for (Appointment app : appointmentsToCancel) {
             appointmentRepository.delete(app.getAppId());
-            Integer petId=app.getPetId();
+            Integer petId = app.getPetId();
             sendVacationNotification(petId);
         }
     }
@@ -538,8 +825,13 @@ public class Service {
      *
      * @return A list of veterinarians sorted by specialization.
      */
-    public List<Veterinarian> sortVeterinariansBySpecialization() {
-        return vetRepository.getAll().stream()
+    public List<Veterinarian> sortVeterinariansBySpecialization() throws EntityNotFoundException {
+        List<Veterinarian> veterinarians = vetRepository.getAll();
+        if (veterinarians.isEmpty()) {
+            throw new EntityNotFoundException("No veterinarians found.");
+        }
+
+        return veterinarians.stream()
                 .sorted(Comparator.comparing(Veterinarian::getSpecialization))
                 .collect(Collectors.toList());
     }
@@ -549,9 +841,14 @@ public class Service {
      *
      * @return A list of appointments sorted by date.
      */
-    public List<Appointment> sortAppointmentsByDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return appointmentRepository.getAll().stream()
+    public List<Appointment> sortAppointmentsByDate() throws EntityNotFoundException {
+        List<Appointment> appointments = appointmentRepository.getAll();
+        if (appointments.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found.");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return appointments.stream()
                 .sorted((a1, a2) -> {
                     LocalDate date1 = LocalDate.parse(a1.getDate(), formatter);
                     LocalDate date2 = LocalDate.parse(a2.getDate(), formatter);
@@ -563,22 +860,35 @@ public class Service {
     /**
      * Retrieves appointments within a specified date range.
      *
-     * @param startDateStr The start date in "dd-MM-yyyy" format.
-     * @param endDateStr The end date in "dd-MM-yyyy" format.
+     * @param startDateStr The start date in "yyyy-MM-dd" format.
+     * @param endDateStr The end date in "yyyy-MM-dd" format.
      * @return A list of appointments within the specified date range.
      * @throws Exception if the date format is invalid.
      */
-    public List<Appointment> getAppointmentsInDateRange(String startDateStr, String endDateStr) throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+    public List<Appointment> getAppointmentsInDateRange(String startDateStr, String endDateStr) throws ValidationException, EntityNotFoundException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate;
+        LocalDate endDate;
 
-        return appointmentRepository.getAll().stream()
+        try {
+            startDate = LocalDate.parse(startDateStr, formatter);
+            endDate = LocalDate.parse(endDateStr, formatter);
+        } catch (DateTimeParseException e) {
+            throw new ValidationException("Invalid date format, expected yyyy-MM-dd.");
+        }
+
+        List<Appointment> appointments = appointmentRepository.getAll().stream()
                 .filter(appointment -> {
                     LocalDate appointmentDate = LocalDate.parse(appointment.getDate(), formatter);
                     return !appointmentDate.isBefore(startDate) && !appointmentDate.isAfter(endDate);
                 })
                 .collect(Collectors.toList());
+
+        if (appointments.isEmpty()) {
+            throw new EntityNotFoundException("No appointments found in the specified date range.");
+        }
+
+        return appointments;
     }
 
 }

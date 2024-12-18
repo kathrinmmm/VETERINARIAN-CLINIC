@@ -14,7 +14,7 @@ package Model;
  * @see Veterinarian
  * @see Disease
  * @see Vaccine
- * @see Test
+ * @see HealthTest
  * @see Appointment
  * @see HealthRecord
  * @see Notification
@@ -30,6 +30,7 @@ public class IdGenerator {
     private static int nextAppId = 50;
     private static int nextHRId = 20;
     private static int nextNotifId = 20;
+    private static int nextPetDiseaseId = 5;
 
     /**
      * Generates a unique ID for a pet. The ID is incremented each time this method is called.
@@ -101,5 +102,9 @@ public class IdGenerator {
      */
     public static int getNotifId() {
         return nextNotifId++;
+    }
+
+    public static int getNextPetDiseaseId() {
+        return nextPetDiseaseId++;
     }
 }

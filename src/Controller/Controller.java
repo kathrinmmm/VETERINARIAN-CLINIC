@@ -4,7 +4,6 @@ import Model.*;
 import Service.Service;
 import Utils.NotificationType;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -77,10 +76,10 @@ public class Controller {
     /**
      * Creates a new test and adds it to the repository.
      *
-     * @param test the test to be added
+     * @param healthTest the test to be added
      */
-    public void createTest(Test test) {
-        service.addTest(test);
+    public void createTest(HealthTest healthTest) {
+        service.addTest(healthTest);
     }
 
     /**
@@ -124,7 +123,7 @@ public class Controller {
      *
      * @return a list of all tests
      */
-    public List<Test> getAllTests() {
+    public List<HealthTest> getAllTests() {
         return service.getAllTests();
     }
 

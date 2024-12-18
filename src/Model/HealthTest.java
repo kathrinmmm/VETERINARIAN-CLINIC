@@ -7,7 +7,7 @@ import Utils.TestType;
  * It includes information about the test's name and type. The class also implements the {@code HasId} interface,
  * ensuring each test has a unique identifier.
  */
-public class Test implements HasId {
+public class HealthTest implements HasId {
 
     /**
      * The unique identifier for this {@code Test}.
@@ -31,7 +31,7 @@ public class Test implements HasId {
      * @param name the name of the test
      * @param testType the type of the test (e.g., diagnostic, routine, etc.)
      */
-    public Test(int id, String name, TestType testType) {
+    public HealthTest(int id, String name, TestType testType) {
         this.id = id;
         this.name = name;
         this.testType = testType;
@@ -43,7 +43,7 @@ public class Test implements HasId {
      * @param name the name of the test
      * @param testType the type of the test
      */
-    public Test(String name, TestType testType) {
+    public HealthTest(String name, TestType testType) {
         this.name = name;
         this.testType = testType;
     }
